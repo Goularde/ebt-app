@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import {
   Button,
   Pressable,
@@ -16,23 +16,26 @@ import countries from "../data/countries.json";
 import SelectFlatList from "../components/SelectFlatList";
 
 const AddBillScreen = () => {
-  const dataCountries = countries;
+  const [dataCountries, setDataCountries] = useState<string[]>([]);
 
   const { user } = useAuth();
-
+  const [selectedCountry, setSelectedCountry] = useState<String | undefined>();
   const [city, onChangeCity] = useState("");
-  const [country, setSelectedCountry] = useState("");
   const [postal, onChangePostal] = useState("");
   const [billValue, onChangeBillValue] = useState("");
   const [shortCode, onChangeShortCode] = useState("");
   const [serial, onChangeSerial] = useState("");
   const [comment, onChangeComment] = useState("");
 
+  useEffect(() => {
+    setDataCountries(countries);
+  }, []);
+
   const addBill = async () => {
     try {
       const response = await fetch(
         process.env.BASE_URL +
-          `?m=insertbills&v=1&PHPSESSID=${user?.sessionId}&city=${city}&zip=${postal}&country=${country}&serial0=${serial}&denomination0=${billValue}&shortcode0=${shortCode}&comment0=${comment}`,
+          `?m=insertbills&v=1&PHPSESSID=${user?.sessionId}&city=${city}&zip=${postal}&country=${selectedCountry}&serial0=${serial}&denomination0=${billValue}&shortcode0=${shortCode}&comment0=${comment}`,
         {
           method: "POST",
           credentials: "include",
@@ -41,11 +44,14 @@ const AddBillScreen = () => {
       const result = await response.json();
       // const result = "coucou"
       console.log(result);
-      console.log(country)
     } catch (error) {
       console.log("Error :" + error);
       return null;
     }
+  };
+
+  const handleCountryClick = (country: String) => {
+    setSelectedCountry(country);
   };
   return (
     <SafeAreaView style={styles.container}>
@@ -57,12 +63,26 @@ const AddBillScreen = () => {
             value={city}
             placeholder="Ville"
           />
-          <SelectList
+          {/* <SelectList
             setSelected={(value: string) => setSelectedCountry(value)}
             data={dataCountries}
             defaultOption={{ key: "1", value: "France" }}
-          />
-          <SelectFlatList placeholder="Selectionnez un pays" data={dataCountries}/>
+          /> */}
+          {dataCountries ? (
+            <SelectFlatList
+              placeholder="Selectionnez un pays"
+              data={dataCountries}
+              handleClick={handleCountryClick}
+            />
+          ) : (
+            <View style={styles.inputContainer}>
+              <Text>Loading...</Text>
+            </View>
+          )}
+          {/* <SelectFlatList
+            placeholder="Selectionnez un pays"
+            data={dataCountries}
+          /> */}
           {/* <TextInput
             style={styles.input}
             onChangeText={onChangeCountry}
@@ -86,13 +106,13 @@ const AddBillScreen = () => {
           <TextInput
             style={styles.input}
             onChangeText={onChangeShortCode}
-            value={shortCode}
+            value={shortCode.toUpperCase()}
             placeholder="Code imprimeur "
           />
           <TextInput
             style={styles.input}
             onChangeText={onChangeSerial}
-            value={serial}
+            value={serial.toUpperCase()}
             placeholder="Numéro de série"
           />
           <TextInput
@@ -121,7 +141,7 @@ const styles = StyleSheet.create({
     borderColor: "#383838",
     borderRadius: 5,
     margin: 20,
-    padding: 12
+    padding: 12,
   },
   input: {
     height: 45,
