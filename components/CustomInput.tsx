@@ -35,7 +35,7 @@ export default function CustomInput({
           <View
             style={[
               {
-                borderColor: error ? "red" : "#e8e8e8",
+                borderColor: error ? "red" : "#e8e8e8", minHeight: 40
               },
             ]}
           >
@@ -44,7 +44,7 @@ export default function CustomInput({
               onChangeText={onChange}
               onBlur={onBlur}
               placeholder={placeholder}
-              style={[styles.input, {}]}
+              style={styles.input}
               secureTextEntry={secureTextEntry}
             />
           </View>
@@ -69,5 +69,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     marginBottom: 10
   },
-  input: {width: 100},
+  input: {flex:1 },
 });

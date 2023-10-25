@@ -17,7 +17,15 @@ const LogInScreen = ({ onPress }: LoginScreenProps) => {
   const { signIn } = useAuth();
 
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center", marginHorizontal: 10 }}>
+    <View
+      style={{
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        marginHorizontal: 10,
+      }}
+    >
+      <Text style={{ marginBottom: 20, fontSize: 25 }}>Euro bill better</Text>
       <CustomInput
         name="email"
         placeholder="Email"
