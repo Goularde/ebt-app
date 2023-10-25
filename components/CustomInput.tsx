@@ -31,10 +31,9 @@ export default function CustomInput({
         field: { value, onChange, onBlur },
         fieldState: { error },
       }) => (
-        <View>
+        <View style={styles.container}>
           <View
             style={[
-              styles.container,
               {
                 borderColor: error ? "red" : "#e8e8e8",
               },
@@ -63,14 +62,12 @@ export default function CustomInput({
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
     width: "100%",
     borderColor: "#e8e8e8",
     borderWidth: 1,
     borderRadius: 5,
     paddingHorizontal: 10,
-    marginVertical: 5,
+    marginBottom: 10
   },
-  input: {},
+  input: {width: 100},
 });

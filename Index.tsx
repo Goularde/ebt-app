@@ -22,13 +22,14 @@ export default function App() {
         <Tab.Navigator
           screenOptions={({ route }) => ({
             tabBarIcon: ({ focused, color, size }) => {
-              let iconName;
+              let iconName: keyof typeof Ionicons.glyphMap;
 
               if (route.name === "Profile") {
                 iconName = focused ? "person" : "person-outline";
               } else if (route.name === "Add Bill") {
                 iconName = focused ? "add-circle" : "add-circle-outline";
               }
+              //@ts-ignore
               return <Ionicons name={iconName} size={size} color={color} />;
             },
             tabBarActiveTintColor: "tomato",

@@ -17,8 +17,7 @@ const LogInScreen = ({ onPress }: LoginScreenProps) => {
   const { signIn } = useAuth();
 
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text>Email : </Text>
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center", marginHorizontal: 10 }}>
       <CustomInput
         name="email"
         placeholder="Email"
