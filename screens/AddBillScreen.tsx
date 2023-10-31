@@ -26,10 +26,28 @@ const AddBillScreen = () => {
   const [shortCode, onChangeShortCode] = useState("");
   const [serial, onChangeSerial] = useState("");
   const [comment, onChangeComment] = useState("");
+  const [result, setResult] = useState<String>();
 
   useEffect(() => {
     setDataCountries(countries);
   }, []);
+
+  const formatAddBillResponse = (status: number) => {
+    console.log(status);
+    
+    if (status === 0) {
+      setResult("Billet enregistré, pas de hit");
+    }
+    if (status === 1) {
+      setResult("Billet enregistré /! HIT /!");
+    }
+    if (status === 24) {
+      setResult("Mauvais numéro de série et de code imprimeur");
+    }
+    else {
+      setResult("Erreur");
+    }
+  };
 
   const addBill = async () => {
     try {
@@ -44,6 +62,8 @@ const AddBillScreen = () => {
       const result = await response.json();
       // const result = "coucou"
       console.log(result);
+      
+      formatAddBillResponse(result.note0.status);
     } catch (error) {
       console.log("Error :" + error);
       return null;
@@ -122,11 +142,10 @@ const AddBillScreen = () => {
             placeholder="Commentaire"
           />
         </View>
-        <View>
-          <Pressable style={styles.button} onPress={addBill}>
-            <Text style={styles.buttonText}>Ajouter le billet</Text>
-          </Pressable>
-        </View>
+        <Pressable style={styles.button} onPress={addBill}>
+          <Text style={styles.buttonText}>Ajouter le billet</Text>
+        </Pressable>
+        {result ? <Text>{result}</Text> : <></>}
       </ScrollView>
     </SafeAreaView>
   );

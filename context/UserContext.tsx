@@ -69,7 +69,6 @@ const useProvideAuth = () => {
         }
       );
       setUser(null);
-      console.log("Success Logout !");
     } catch (error) {
       console.log("Error :" + error);
       return null;
