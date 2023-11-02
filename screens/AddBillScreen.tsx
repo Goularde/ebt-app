@@ -14,6 +14,8 @@ import { StatusBar } from "expo-status-bar";
 import { SelectList } from "react-native-dropdown-select-list";
 import countries from "../data/countries.json";
 import SelectFlatList from "../components/SelectFlatList";
+import CustomInput from "../components/CustomInput";
+import { useForm } from "react-hook-form";
 
 const AddBillScreen = () => {
   const [dataCountries, setDataCountries] = useState<string[]>([]);
@@ -28,13 +30,15 @@ const AddBillScreen = () => {
   const [comment, onChangeComment] = useState("");
   const [result, setResult] = useState<String>();
 
+  const { control, handleSubmit } = useForm();
+
   useEffect(() => {
     setDataCountries(countries);
   }, []);
 
   const formatAddBillResponse = (status: number) => {
     console.log(status);
-    
+
     if (status === 0) {
       setResult("Billet enregistré, pas de hit");
     }
@@ -43,8 +47,7 @@ const AddBillScreen = () => {
     }
     if (status === 24) {
       setResult("Mauvais numéro de série et de code imprimeur");
-    }
-    else {
+    } else {
       setResult("Erreur");
     }
   };
@@ -62,7 +65,7 @@ const AddBillScreen = () => {
       const result = await response.json();
       // const result = "coucou"
       console.log(result);
-      
+
       formatAddBillResponse(result.note0.status);
     } catch (error) {
       console.log("Error :" + error);
