@@ -6,7 +6,6 @@ import {
   TextInput,
   View,
   Pressable,
-  Animated,
   Modal,
   FlatList,
 } from "react-native";
@@ -80,15 +79,19 @@ export default function SelectFlatList({
             >
               <View style={styles.centeredView}>
                 <View style={styles.modalView}>
-                  <Ionicons
-                    name="close-outline"
-                    size={20}
-                    onPress={() => {
-                      setModalVisible(false);
-                      setIsPressed(!isPressed);
-                    }}
-                    style={styles.modalCloseIcon}
-                  />
+                  <View style={styles.modalHeader}>
+                    <Text style={{fontWeight: "bold"}}>{placeholder}</Text>
+                    <Ionicons
+                      name="close-outline"
+                      size={15}
+                      onPress={() => {
+                        setModalVisible(false);
+                        setIsPressed(!isPressed);
+                      }}
+                      style={styles.modalCloseIcon}
+                    />
+                  </View>
+
                   <FlatList
                     style={styles.flatList}
                     data={data}
@@ -186,7 +189,7 @@ const styles = StyleSheet.create({
   },
   item: {
     borderBottomWidth: 1,
-    padding: 10,
+    padding: 15,
     paddingLeft: 20,
     borderColor: "#e8e8e8",
   },
@@ -205,10 +208,14 @@ const styles = StyleSheet.create({
   },
   modalCloseIcon: {
     alignSelf: "flex-end",
-    right: 10,
-    top: 10,
   },
   flatList: {
     marginTop: 20,
+  },
+  modalHeader: {
+    marginTop: 15,
+    paddingHorizontal: 20,
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
 });

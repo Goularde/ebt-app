@@ -37,8 +37,6 @@ const AddBillScreen = () => {
   }, []);
 
   const formatAddBillResponse = (status: number) => {
-    console.log(status);
-
     if (status === 0) {
       setResult("Billet enregistré, pas de hit");
     }
