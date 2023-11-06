@@ -13,7 +13,7 @@ import {
 type CustomInputProps = {
   placeholder: string;
   data: string[];
-  handleClick: (country: String) => void;
+  handleClick: (item: String) => void;
 };
 
 export default function SelectFlatList({
@@ -22,7 +22,7 @@ export default function SelectFlatList({
   handleClick,
 }: CustomInputProps) {
   const [isPressed, setIsPressed] = useState(false);
-  const [selectedCountry, setSelectedCountry] = useState<String | undefined>();
+  const [selectedItem, setSelectedItem] = useState<String | undefined>();
   const [modalVisible, setModalVisible] = useState(false);
 
   return (
@@ -41,15 +41,13 @@ export default function SelectFlatList({
               paddingVertical: 4,
             }}
           >
-            <Text>
-              {selectedCountry ? selectedCountry.toString() : placeholder}
-            </Text>
-            {selectedCountry ? (
+            <Text>{selectedItem ? selectedItem.toString() : placeholder}</Text>
+            {selectedItem ? (
               <Ionicons
                 name="close-outline"
                 size={18}
                 onPress={() => {
-                  setSelectedCountry(undefined);
+                  setSelectedItem(undefined);
                 }}
               />
             ) : (
@@ -80,7 +78,7 @@ export default function SelectFlatList({
               <View style={styles.centeredView}>
                 <View style={styles.modalView}>
                   <View style={styles.modalHeader}>
-                    <Text style={{fontWeight: "bold"}}>{placeholder}</Text>
+                    <Text style={{ fontWeight: "bold" }}>{placeholder}</Text>
                     <Ionicons
                       name="close-outline"
                       size={15}
@@ -91,7 +89,6 @@ export default function SelectFlatList({
                       style={styles.modalCloseIcon}
                     />
                   </View>
-
                   <FlatList
                     style={styles.flatList}
                     data={data}
@@ -102,7 +99,7 @@ export default function SelectFlatList({
                           key={item}
                           style={styles.item}
                           onPress={() => {
-                            setSelectedCountry(item);
+                            setSelectedItem(item);
                             setIsPressed(!isPressed);
                             handleClick(item);
                           }}
@@ -114,47 +111,6 @@ export default function SelectFlatList({
                   />
                 </View>
               </View>
-              {/* <View style={styles.containerItems}>
-                {data.map((item) => {
-                  const animatedOpacity = new Animated.Value(1);
-                  const animate = () => {
-                    Animated.sequence([
-                      Animated.timing(animatedOpacity, {
-                        toValue: 0.1,
-                        duration: 100,
-                        useNativeDriver: true,
-                      }),
-                      Animated.timing(animatedOpacity, {
-                        toValue: 1,
-                        duration: 500,
-                        useNativeDriver: true,
-                      }),
-                    ]).start();
-                  };
-
-                  const OnSelectItem = (country: String) => {
-                    setSelectedCountry(country);
-                    handleClick(country);
-                  };
-                  return (
-                    <Pressable
-                      key={item}
-                      style={() => [[styles.item]]}
-                      onPress={() => {
-                        OnSelectItem(item);
-                        setIsPressed(!isPressed);
-                      }}
-                      onPressIn={() => {
-                        animate();
-                      }}
-                    >
-                      <Animated.View style={{ opacity: animatedOpacity }}>
-                        <Text>{item}</Text>
-                      </Animated.View>
-                    </Pressable>
-                  );
-                })}
-              </View> */}
             </Modal>
           </View>
         </>

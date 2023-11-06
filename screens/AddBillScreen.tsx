@@ -1,6 +1,5 @@
-import { SetStateAction, useEffect, useState } from "react";
+import { useState } from "react";
 import {
-  Button,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -10,16 +9,10 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuth } from "../context/UserContext";
-import { StatusBar } from "expo-status-bar";
-import { SelectList } from "react-native-dropdown-select-list";
 import countries from "../data/countries.json";
 import SelectFlatList from "../components/SelectFlatList";
-import CustomInput from "../components/CustomInput";
-import { useForm } from "react-hook-form";
 
 const AddBillScreen = () => {
-  const [dataCountries, setDataCountries] = useState<string[]>([]);
-
   const { user } = useAuth();
   const [selectedCountry, setSelectedCountry] = useState<String | undefined>();
   const [city, onChangeCity] = useState("");
@@ -29,12 +22,6 @@ const AddBillScreen = () => {
   const [serial, onChangeSerial] = useState("");
   const [comment, onChangeComment] = useState("");
   const [result, setResult] = useState<String>();
-
-  const { control, handleSubmit } = useForm();
-
-  useEffect(() => {
-    setDataCountries(countries);
-  }, []);
 
   const formatAddBillResponse = (status: number) => {
     if (status === 0) {
@@ -61,7 +48,6 @@ const AddBillScreen = () => {
         }
       );
       const result = await response.json();
-      // const result = "coucou"
       console.log(result);
 
       formatAddBillResponse(result.note0.status);
@@ -84,32 +70,11 @@ const AddBillScreen = () => {
             value={city}
             placeholder="Ville"
           />
-          {/* <SelectList
-            setSelected={(value: string) => setSelectedCountry(value)}
-            data={dataCountries}
-            defaultOption={{ key: "1", value: "France" }}
-          /> */}
-          {dataCountries ? (
-            <SelectFlatList
-              placeholder="Selectionnez un pays"
-              data={dataCountries}
-              handleClick={handleCountryClick}
-            />
-          ) : (
-            <View style={styles.inputContainer}>
-              <Text>Loading...</Text>
-            </View>
-          )}
-          {/* <SelectFlatList
+          <SelectFlatList
             placeholder="Selectionnez un pays"
-            data={dataCountries}
-          /> */}
-          {/* <TextInput
-            style={styles.input}
-            onChangeText={onChangeCountry}
-            value={country}
-            placeholder="Pays"
-          /> */}
+            data={countries}
+            handleClick={handleCountryClick}
+          />
           <TextInput
             style={styles.input}
             onChangeText={onChangePostal}
