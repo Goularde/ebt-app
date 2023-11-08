@@ -1,8 +1,9 @@
-import { Text, View, Pressable, TextInput } from "react-native";
+import { Text, View, Pressable } from "react-native";
 import CustomInput from "../components/CustomInput";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../context/UserContext";
 import Svg, { Path } from "react-native-svg";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 type LoginScreenProps = {
   onPress: () => void;
@@ -18,12 +19,10 @@ const LogInScreen = ({ onPress }: LoginScreenProps) => {
   const { signIn } = useAuth();
 
   return (
-    <>
-      <Svg width={'200'} height={231} fill="#17C3B2">
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#FEF9EF" }}>
+      <Svg height={231} fill="#17C3B2">
         <Path d="M0 0h279v159H0z" />
-        <Path
-          d="M279 158.5c0 19.228-14.697 37.669-40.859 51.265C211.98 223.362 176.498 231 139.5 231c-36.998 0-72.48-7.638-98.641-21.235C14.697 196.169 0 177.728 0 158.5h279Z"
-        />
+        <Path d="M279 158.5c0 19.228-14.697 37.669-40.859 51.265C211.98 223.362 176.498 231 139.5 231c-36.998 0-72.48-7.638-98.641-21.235C14.697 196.169 0 177.728 0 158.5h279Z" />
       </Svg>
       <View
         style={{
@@ -57,7 +56,7 @@ const LogInScreen = ({ onPress }: LoginScreenProps) => {
           <Text>Log In</Text>
         </Pressable>
       </View>
-    </>
+    </SafeAreaView>
   );
 };
 

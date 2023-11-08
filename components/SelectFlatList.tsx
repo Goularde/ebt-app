@@ -13,7 +13,7 @@ import {
 type CustomInputProps = {
   placeholder: string;
   data: string[];
-  handleClick: (item: String) => void;
+  handleClick: (item: String | undefined) => void;
 };
 
 export default function SelectFlatList({
@@ -41,17 +41,20 @@ export default function SelectFlatList({
               paddingVertical: 4,
             }}
           >
-            <Text>{selectedItem ? selectedItem.toString() : placeholder}</Text>
+            <Text style={{ color: selectedItem ? "black" : "grey" }}>
+              {selectedItem ? selectedItem.toString() : placeholder}
+            </Text>
             {selectedItem ? (
               <Ionicons
                 name="close-outline"
                 size={18}
                 onPress={() => {
                   setSelectedItem(undefined);
+                  handleClick(undefined);
                 }}
               />
             ) : (
-              <Ionicons name="search" size={18} />
+              <Ionicons name="chevron-down-outline" size={18} />
             )}
           </Pressable>
         </View>
@@ -124,24 +127,24 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     width: "100%",
-    borderColor: "grey",
-    borderWidth: 1,
     borderRadius: 10,
     paddingVertical: 7,
     paddingHorizontal: 10,
-    marginBottom: 10,
+    marginBottom: 15,
     maxHeight: 45,
+    backgroundColor: "#FEF9EF",
+    elevation: 3,
   },
   containerColumn: {
     flex: 1,
     flexDirection: "column",
     width: "100%",
-    borderColor: "grey",
-    borderWidth: 1,
     borderRadius: 10,
     paddingVertical: 7,
     paddingHorizontal: 10,
-    marginBottom: 10,
+    marginBottom: 15,
+    backgroundColor: "#FEF9EF",
+    elevation: 3,
   },
   item: {
     borderBottomWidth: 1,

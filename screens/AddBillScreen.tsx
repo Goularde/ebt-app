@@ -10,38 +10,26 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuth } from "../context/UserContext";
 import countries from "../data/countries.json";
+import billValues from "../data/billValues.json";
 import SelectFlatList from "../components/SelectFlatList";
+import { formatAddBillResponse } from "../utils/formatAddBillResponse";
 
 const AddBillScreen = () => {
   const { user } = useAuth();
-  const [selectedCountry, setSelectedCountry] = useState<String | undefined>();
-  const [city, onChangeCity] = useState("");
-  const [postal, onChangePostal] = useState("");
-  const [billValue, onChangeBillValue] = useState("");
-  const [shortCode, onChangeShortCode] = useState("");
-  const [serial, onChangeSerial] = useState("");
-  const [comment, onChangeComment] = useState("");
+  const [country, setCountry] = useState<String | undefined>();
+  const [billValue, setBillValue] = useState<String | undefined>();
+  const [city, setCity] = useState("");
+  const [postal, setPostal] = useState("");
+  const [shortCode, setShortCode] = useState("");
+  const [serial, setSerial] = useState("");
+  const [comment, setComment] = useState("");
   const [result, setResult] = useState<String>();
-
-  const formatAddBillResponse = (status: number) => {
-    if (status === 0) {
-      setResult("Billet enregistré, pas de hit");
-    }
-    if (status === 1) {
-      setResult("Billet enregistré /! HIT /!");
-    }
-    if (status === 24) {
-      setResult("Mauvais numéro de série et de code imprimeur");
-    } else {
-      setResult("Erreur");
-    }
-  };
 
   const addBill = async () => {
     try {
       const response = await fetch(
         process.env.BASE_URL +
-          `?m=insertbills&v=1&PHPSESSID=${user?.sessionId}&city=${city}&zip=${postal}&country=${selectedCountry}&serial0=${serial}&denomination0=${billValue}&shortcode0=${shortCode}&comment0=${comment}`,
+          `?m=insertbills&v=1&PHPSESSID=${user?.sessionId}&city=${city}&zip=${postal}&country=${country}&serial0=${serial}&denomination0=${billValue}&shortcode0=${shortCode}&comment0=${comment}`,
         {
           method: "POST",
           credentials: "include",
@@ -50,69 +38,83 @@ const AddBillScreen = () => {
       const result = await response.json();
       console.log(result);
 
-      formatAddBillResponse(result.note0.status);
+      setResult(formatAddBillResponse(result.note0.status));
     } catch (error) {
       console.log("Error :" + error);
       return null;
     }
   };
 
-  const handleCountryClick = (country: String) => {
-    setSelectedCountry(country);
+  const handleCountryPress = (country: String | undefined) => {
+    setCountry(country);
+  };
+
+  const handleBillValuePress = (billValue: String | undefined) => {
+    setBillValue(billValue);
   };
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView automaticallyAdjustKeyboardInsets={true}>
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.input}
-            onChangeText={onChangeCity}
-            value={city}
-            placeholder="Ville"
-          />
-          <SelectFlatList
-            placeholder="Selectionnez un pays"
-            data={countries}
-            handleClick={handleCountryClick}
-          />
-          <TextInput
-            style={styles.input}
-            onChangeText={onChangePostal}
-            value={postal}
-            placeholder="Code Postal"
-          />
-        </View>
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.input}
-            onChangeText={onChangeBillValue}
-            value={billValue}
-            placeholder="Valeur"
-          />
-          <TextInput
-            style={styles.input}
-            onChangeText={onChangeShortCode}
-            value={shortCode.toUpperCase()}
-            placeholder="Code imprimeur "
-          />
-          <TextInput
-            style={styles.input}
-            onChangeText={onChangeSerial}
-            value={serial.toUpperCase()}
-            placeholder="Numéro de série"
-          />
-          <TextInput
-            style={styles.input}
-            onChangeText={onChangeComment}
-            value={comment}
-            placeholder="Commentaire"
-          />
-        </View>
-        <Pressable style={styles.button} onPress={addBill}>
-          <Text style={styles.buttonText}>Ajouter le billet</Text>
-        </Pressable>
-        {result ? <Text>{result}</Text> : <></>}
-      </ScrollView>
+      <View>
+        {/* ScrollView is used here to adjust input to the keyboard size  */}
+        <ScrollView automaticallyAdjustKeyboardInsets={true}>
+          <View style={styles.inputContainer}>
+            <View>
+              <SelectFlatList
+                placeholder="Selectionnez un pays"
+                data={countries}
+                handleClick={handleCountryPress}
+              />
+              <TextInput
+                style={styles.input}
+                onChangeText={setCity}
+                value={city}
+                placeholder="Ville"
+              />
+              <TextInput
+                style={styles.input}
+                onChangeText={setPostal}
+                value={postal}
+                placeholder="Code Postal"
+              />
+            </View>
+          </View>
+          <View style={styles.inputContainer}>
+            <SelectFlatList
+              placeholder="Selectionnez la valeur du billet"
+              data={billValues}
+              handleClick={handleBillValuePress}
+            />
+            <TextInput
+              style={styles.input}
+              onChangeText={setShortCode}
+              value={shortCode.toUpperCase()}
+              placeholder="Code imprimeur "
+            />
+            <TextInput
+              style={styles.input}
+              onChangeText={setSerial}
+              value={serial.toUpperCase()}
+              placeholder="Numéro de série"
+            />
+            <TextInput
+              style={styles.input}
+              onChangeText={setComment}
+              value={comment}
+              placeholder="Commentaire"
+            />
+          </View>
+          <Pressable
+            style={({ pressed }) => [
+              styles.button,
+              pressed && { opacity: 0.8 },
+            ]}
+            onPress={addBill}
+          >
+            <Text style={styles.buttonText}>Ajouter le billet</Text>
+          </Pressable>
+          {result ? <Text style={styles.text}>{result}</Text> : <></>}
+        </ScrollView>
+      </View>
     </SafeAreaView>
   );
 };
@@ -120,21 +122,27 @@ const AddBillScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: "center",
+    backgroundColor: "#FEF9EF",
   },
   inputContainer: {
-    borderWidth: 2,
-    borderColor: "#383838",
-    borderRadius: 5,
+    // borderWidth: 2,
+    // borderColor: "#ffa91c",
+    borderRadius: 10,
     margin: 20,
-    padding: 12,
+    paddingTop: 15,
+    paddingHorizontal: 15,
+    paddingBottom: 4,
+    backgroundColor: "#FFCB77",
+    elevation: 5,
   },
   input: {
     height: 45,
-    marginBottom: 10,
-    borderWidth: 1,
+    marginBottom: 15,
     borderRadius: 10,
-    borderColor: "grey",
+    elevation: 3,
     paddingHorizontal: 10,
+    backgroundColor: "#FEF9EF",
   },
   button: {
     marginHorizontal: 19,
@@ -144,7 +152,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 32,
     borderRadius: 4,
     elevation: 3,
-    backgroundColor: "black",
+    backgroundColor: "#227c9d",
+  },
+  text: {
+    marginTop: 15,
+    alignSelf: "center",
   },
   buttonText: {
     color: "white",

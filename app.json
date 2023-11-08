@@ -1,13 +1,13 @@
 {
   "expo": {
-    "name": "euro-bill-better",
-    "slug": "euro-bill-better",
-    "version": "1.0.0",
+    "name": "ebt-app",
+    "slug": "ebt-app",
+    "version": "0.0.2",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/ebtLogo.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/ebtScreen.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -20,17 +20,18 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/ebtLogo.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.goularde.eurobillbetter"
+      "package": "com.goularde.ebtapp",
+      "versionCode": 2
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "extra": {
       "eas": {
-        "projectId": "1eff9af1-3a24-449f-a2b8-4245596fab81"
+        "projectId": "92cfca62-4ba2-4146-94d0-e543d366d1bc"
       }
     }
   }
