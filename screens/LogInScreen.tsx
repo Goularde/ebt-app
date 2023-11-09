@@ -5,16 +5,7 @@ import { useAuth } from "../context/UserContext";
 import Svg, { Path } from "react-native-svg";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-type LoginScreenProps = {
-  onPress: () => void;
-};
-
-type DataType = {
-  email: string;
-  password: string;
-};
-
-const LogInScreen = ({ onPress }: LoginScreenProps) => {
+const LogInScreen = () => {
   const { control, handleSubmit } = useForm();
   const { signIn } = useAuth();
 
@@ -52,7 +43,7 @@ const LogInScreen = ({ onPress }: LoginScreenProps) => {
           secureTextEntry
           rules={{ required: "Veuillez entrez un mot de passe" }}
         />
-        <Pressable onPress={handleSubmit(signIn)}>
+        <Pressable onPress={(handleSubmit(signIn))}>
           <Text>Log In</Text>
         </Pressable>
       </View>

@@ -16,7 +16,6 @@
     "expo": "~49.0.11",
     "expo-status-bar": "~1.6.0",
     "react": "18.2.0",
-    "react-canvas-confetti": "^1.4.0",
     "react-hook-form": "^7.46.2",
     "react-native": "0.72.6",
     "react-native-dotenv": "^3.4.9",
