@@ -1,10 +1,8 @@
 import { useState } from "react";
 import {
-  Pressable,
   ScrollView,
   StyleSheet,
   Text,
-  TextInput,
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -14,39 +12,23 @@ import billValues from "../data/billValues.json";
 import SelectFlatList from "../components/SelectFlatList";
 import { formatAddBillResponse } from "../utils/formatAddBillResponse";
 import { useForm } from "react-hook-form";
+import { bill } from "../types/bill";
+import CustomInput from "../components/CustomInput";
+import { CustomButton } from "../components/CustomButton";
 
 const AddBillScreen = () => {
   const { user } = useAuth();
   const [country, setCountry] = useState<String | undefined>();
   const [billValue, setBillValue] = useState<String | undefined>();
-  const [city, setCity] = useState("");
-  const [postal, setPostal] = useState("");
-  const [shortCode, setShortCode] = useState("");
-  const [serial, setSerial] = useState("");
-  const [comment, setComment] = useState("");
   const [result, setResult] = useState<String>();
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    defaultValues: {
-      country: undefined,
-      city: "",
-      postal: "",
-      billValue: undefined,
-      shortCode: "",
-      serial: "",
-      comment: "",
-    },
-  });
+  const { handleSubmit, control } = useForm();
 
-  const addBill = async () => {
+  const addBill = async (data: bill) => {
     try {
       const response = await fetch(
         process.env.BASE_URL +
-          `?m=insertbills&v=1&PHPSESSID=${user?.sessionId}&city=${city}&zip=${postal}&country=${country}&serial0=${serial}&denomination0=${billValue}&shortcode0=${shortCode}&comment0=${comment}`,
+          `?m=insertbills&v=1&PHPSESSID=${user?.sessionId}&city=${data.city}&zip=${data.postal}&country=${country}&serial0=${data.serial}&denomination0=${billValue}&shortcode0=${data.shortCode}&comment0=${data.comment}`,
         {
           method: "POST",
           credentials: "include",
@@ -79,21 +61,18 @@ const AddBillScreen = () => {
                 placeholder="Selectionnez un pays"
                 data={countries}
                 handleClick={handleCountryPress}
-                {...register("country", { required: true })}
               />
-              <TextInput
-                style={styles.input}
-                onChangeText={setCity}
-                value={city}
+              <CustomInput
+                name="city"
                 placeholder="Ville"
-                {...register("city", { required: true })}
+                control={control}
+                rules={{ required: "Veuillez entrer une ville" }}
               />
-              <TextInput
-                style={styles.input}
-                onChangeText={setPostal}
-                value={postal}
-                placeholder="Code Postal"
-                {...register("postal", { required: true })}
+              <CustomInput
+                name="postal"
+                placeholder="Code postal"
+                control={control}
+                rules={{ required: "Veuillez entrer un code postal" }}
               />
             </View>
           </View>
@@ -102,44 +81,33 @@ const AddBillScreen = () => {
               placeholder="Selectionnez la valeur du billet"
               data={billValues}
               handleClick={handleBillValuePress}
-              {...register("billValue", { required: true })}
             />
-            <TextInput
-              style={styles.input}
-              onChangeText={setShortCode}
-              value={shortCode.toUpperCase()}
-              placeholder="Code imprimeur "
-              {...register("shortCode", { required: true })}
+            <CustomInput
+              name="shortCode"
+              placeholder="Code imprimeur"
+              control={control}
+              rules={{ required: "Veuillez entrer un code imprimeur" }}
             />
-            <TextInput
-              style={styles.input}
-              onChangeText={setSerial}
-              value={serial.toUpperCase()}
+            <CustomInput
+              name="serial"
               placeholder="Numéro de série"
-              {...register("serial", { required: true })}
+              control={control}
+              rules={{ required: "Veuillez entrer un code numéro de série" }}
             />
-            <TextInput
-              style={styles.input}
-              onChangeText={setComment}
-              value={comment}
+            <CustomInput
+              name="comment"
               placeholder="Commentaire"
-              {...register("comment", { required: true })}
+              control={control}
             />
           </View>
-          <Pressable
-            style={({ pressed }) => [
-              styles.button,
-              pressed && { opacity: 0.8 },
-            ]}
-            onPress={handleSubmit((data) => {
-              addBill;
-            })}
-          >
-            <Text style={styles.buttonText}>Ajouter le billet</Text>
-          </Pressable>
           {result ? <Text style={styles.text}>{result}</Text> : <></>}
+          <CustomButton
+            text="Ajouter le billet"
+            onPress={handleSubmit(addBill)}
+          />
         </ScrollView>
       </View>
+      
     </SafeAreaView>
   );
 };
@@ -181,8 +149,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#227c9d",
   },
   text: {
-    marginTop: 15,
     alignSelf: "center",
+    color: "#FE6D73",
+    marginBottom: 15,
   },
   buttonText: {
     color: "white",

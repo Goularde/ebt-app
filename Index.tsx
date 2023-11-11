@@ -19,6 +19,7 @@ export default function App() {
   if (user) {
     return (
       <NavigationContainer>
+        <StatusBar translucent style={"dark"} />
         <Tab.Navigator
           screenOptions={({ route }) => ({
             tabBarIcon: ({ focused, color, size }) => {

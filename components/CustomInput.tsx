@@ -1,10 +1,10 @@
-import { Control, Controller, FieldValues, useForm } from "react-hook-form";
+import { Control, Controller, FieldValues } from "react-hook-form";
 import { StyleSheet, Text, TextInput, View } from "react-native";
 
 type CustomInputProps = {
   control: Control<FieldValues, any>;
   name: string;
-  rules: {
+  rules?: {
     required?: boolean | string;
     pattern?: {
       value: any;
@@ -31,28 +31,26 @@ export default function CustomInput({
         field: { value, onChange, onBlur },
         fieldState: { error },
       }) => (
-        <View style={styles.container}>
-          <View
-            style={[
-              {
-                borderColor: error ? "red" : "#e8e8e8", minHeight: 40
-              },
-            ]}
-          >
-            <TextInput
-              value={value}
-              onChangeText={onChange}
-              onBlur={onBlur}
-              placeholder={placeholder}
-              style={styles.input}
-              secureTextEntry={secureTextEntry}
-            />
-          </View>
+        <View style={{ marginTop: error ? -15 : 0, marginBottom: 15 }}>
           {error && (
-            <Text style={{ color: "red", alignSelf: "stretch" }}>
+            <Text
+              style={{
+                color: "#FE6D73",
+                alignSelf: "stretch",
+                fontSize: 12,
+              }}
+            >
               {error.message || "Erreur"}
             </Text>
           )}
+          <TextInput
+            value={value}
+            onChangeText={onChange}
+            onBlur={onBlur}
+            placeholder={placeholder}
+            style={styles.input}
+            secureTextEntry={secureTextEntry}
+          />
         </View>
       )}
     />
@@ -60,14 +58,12 @@ export default function CustomInput({
 }
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "#fff",
-    width: "100%",
-    borderColor: "#e8e8e8",
-    borderWidth: 1,
-    borderRadius: 5,
+  input: {
+    flex: 1,
+    minHeight: 45,
+    borderRadius: 10,
+    elevation: 3,
     paddingHorizontal: 10,
-    marginBottom: 10
+    backgroundColor: "#FEF9EF",
   },
-  input: {flex:1 },
 });

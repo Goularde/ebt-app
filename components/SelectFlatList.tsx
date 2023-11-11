@@ -15,12 +15,11 @@ type CustomInputProps = {
   data: string[];
   handleClick: (item: String | undefined) => void;
 };
-
-export default function SelectFlatList({
+const SelectFlatList = ({
   placeholder,
   data,
   handleClick,
-}: CustomInputProps) {
+}: CustomInputProps) => {
   const [isPressed, setIsPressed] = useState(false);
   const [selectedItem, setSelectedItem] = useState<String | undefined>();
   const [modalVisible, setModalVisible] = useState(false);
@@ -37,8 +36,10 @@ export default function SelectFlatList({
             style={{
               flex: 1,
               flexDirection: "row",
+              alignItems: "center",
               justifyContent: "space-between",
-              paddingVertical: 4,
+              minHeight: 45,
+              paddingHorizontal: 10,
             }}
           >
             <Text style={{ color: selectedItem ? "black" : "grey" }}>
@@ -82,15 +83,19 @@ export default function SelectFlatList({
                 <View style={styles.modalView}>
                   <View style={styles.modalHeader}>
                     <Text style={{ fontWeight: "bold" }}>{placeholder}</Text>
-                    <Ionicons
-                      name="close-outline"
-                      size={15}
+                    <Pressable
                       onPress={() => {
                         setModalVisible(false);
                         setIsPressed(!isPressed);
                       }}
-                      style={styles.modalCloseIcon}
-                    />
+                      hitSlop={15}
+                    >
+                      <Ionicons
+                        name="close-outline"
+                        size={15}
+                        style={styles.modalCloseIcon}
+                      />
+                    </Pressable>
                   </View>
                   <FlatList
                     style={styles.flatList}
@@ -120,7 +125,8 @@ export default function SelectFlatList({
       )}
     </>
   );
-}
+};
+export default SelectFlatList;
 
 const styles = StyleSheet.create({
   container: {
@@ -128,8 +134,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     width: "100%",
     borderRadius: 10,
-    paddingVertical: 7,
-    paddingHorizontal: 10,
+    // paddingVertical: 7,
+    // paddingHorizontal: 10,
     marginBottom: 15,
     maxHeight: 45,
     backgroundColor: "#FEF9EF",
