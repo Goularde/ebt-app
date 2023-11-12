@@ -1,5 +1,5 @@
 import { Control, Controller, FieldValues } from "react-hook-form";
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import { StyleSheet, Text, TextInput, View, InputModeOptions } from "react-native";
 
 type CustomInputProps = {
   control: Control<FieldValues, any>;
@@ -13,6 +13,7 @@ type CustomInputProps = {
   };
   placeholder: string;
   secureTextEntry?: boolean | undefined;
+  inputMode?: InputModeOptions | undefined
 };
 
 export default function CustomInput({
@@ -21,6 +22,7 @@ export default function CustomInput({
   rules = {},
   placeholder,
   secureTextEntry,
+  inputMode,
 }: CustomInputProps) {
   return (
     <Controller
@@ -50,6 +52,7 @@ export default function CustomInput({
             placeholder={placeholder}
             style={styles.input}
             secureTextEntry={secureTextEntry}
+            inputMode={inputMode}
           />
         </View>
       )}
@@ -59,7 +62,7 @@ export default function CustomInput({
 
 const styles = StyleSheet.create({
   input: {
-    flex: 1,
+    // flex: 1,
     minHeight: 45,
     borderRadius: 10,
     elevation: 3,

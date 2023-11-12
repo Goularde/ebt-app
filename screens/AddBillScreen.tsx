@@ -1,10 +1,5 @@
 import { useState } from "react";
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuth } from "../context/UserContext";
 import countries from "../data/countries.json";
@@ -35,7 +30,7 @@ const AddBillScreen = () => {
         }
       );
       const result = await response.json();
-      console.log(result);
+      // console.log(result);
       setResult(formatAddBillResponse(result.note0.status));
     } catch (error) {
       console.log("Error :" + error);
@@ -62,6 +57,7 @@ const AddBillScreen = () => {
                 data={countries}
                 handleClick={handleCountryPress}
               />
+
               <CustomInput
                 name="city"
                 placeholder="Ville"
@@ -107,7 +103,6 @@ const AddBillScreen = () => {
           />
         </ScrollView>
       </View>
-      
     </SafeAreaView>
   );
 };
@@ -119,24 +114,13 @@ const styles = StyleSheet.create({
     backgroundColor: "#FEF9EF",
   },
   inputContainer: {
-    // borderWidth: 2,
-    // borderColor: "#ffa91c",
     borderRadius: 10,
-    margin: 20,
+    marginHorizontal: 20,
     paddingTop: 15,
     paddingHorizontal: 15,
     paddingBottom: 4,
     backgroundColor: "#FFCB77",
     elevation: 5,
-    zIndex: -1,
-  },
-  input: {
-    height: 45,
-    marginBottom: 15,
-    borderRadius: 10,
-    elevation: 3,
-    paddingHorizontal: 10,
-    backgroundColor: "#FEF9EF",
   },
   button: {
     marginHorizontal: 19,

@@ -1,5 +1,6 @@
 import { Text, View, Pressable, StyleSheet } from "react-native";
 import { useAuth } from "../context/UserContext";
+import { CustomButton } from "../components/CustomButton";
 
 const ProfileScreen = () => {
   const { user, signOut } = useAuth();
@@ -32,13 +33,7 @@ const ProfileScreen = () => {
           {/*TODO Composant qui affiche dans des barre le pourcentage de chaque billet*/}
         </View>
       </View>
-      <View style={styles.flexRow}>
-        <View style={{ alignSelf: "flex-end" }}>
-          <Pressable onPress={signOut}>
-            <Text>Log Out</Text>
-          </Pressable>
-        </View>
-      </View>
+      <CustomButton text="Se déconnecter" onPress={signOut} />
     </View>
   );
 };
@@ -47,7 +42,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 10,
-    justifyContent:"space-evenly",
+    justifyContent: "space-evenly",
     alignItems: "center",
   },
   labelContainer: {

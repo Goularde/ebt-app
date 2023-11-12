@@ -5,17 +5,12 @@ import ProfileScreen from "./screens/ProfileScreen";
 import AddBillScreen from "./screens/AddBillScreen";
 import LogInScreen from "./screens/LogInScreen";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { useState } from "react";
 import { useAuth } from "./context/UserContext";
 
 export default function App() {
   const Tab = createBottomTabNavigator();
   const { user } = useAuth();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const onLoggedIn = () => {
-    setIsLoggedIn(!isLoggedIn);
-  };
   if (user) {
     return (
       <NavigationContainer>
@@ -44,12 +39,17 @@ export default function App() {
           />
           <Tab.Screen
             name="Profile"
-            children={() => <ProfileScreen />}
+            children={ProfileScreen}
             options={{ headerShown: false }}
           />
         </Tab.Navigator>
       </NavigationContainer>
     );
   }
-  return <LogInScreen onPress={onLoggedIn} />;
+  return (
+    <>
+      <StatusBar translucent style={"dark"} />
+      <LogInScreen />
+    </>
+  );
 }

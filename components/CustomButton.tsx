@@ -3,20 +3,29 @@ import { Text, StyleSheet, Pressable } from "react-native";
 type CustomButtonProps = {
   text: string;
   color?: string;
+  backgrounColor?: string;
+  borderColor?: string;
   onPress: () => void;
 };
 
-export const CustomButton = ({ text, color, onPress }: CustomButtonProps) => {
+export const CustomButton = ({
+  text,
+  color,
+  backgrounColor,
+  borderColor,
+  onPress,
+}: CustomButtonProps) => {
   return (
     <Pressable
       style={({ pressed }) => [
         styles.button,
         pressed && { opacity: 0.8 },
-        { backgroundColor: color ? color : "#227c9d" },
+        borderColor ? { borderWidth: 1, borderColor: borderColor } : {},
+        { backgroundColor: backgrounColor ? backgrounColor : "#227c9d" },
       ]}
       onPress={onPress}
     >
-      <Text style={styles.buttonText}>{text}</Text>
+      <Text style={{ color: color ? color : "#FFFFFF" }}>{text}</Text>
     </Pressable>
   );
 };
@@ -30,8 +39,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: 32,
     borderRadius: 4,
     // elevation: 3,
-  },
-  buttonText: {
-    color: "white",
   },
 });
