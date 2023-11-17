@@ -39,7 +39,7 @@ export default function App() {
           />
           <Tab.Screen
             name="Profile"
-            children={ProfileScreen}
+            component={ProfileScreen}
             options={{ headerShown: false }}
           />
         </Tab.Navigator>

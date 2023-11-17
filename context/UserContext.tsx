@@ -14,6 +14,7 @@ const UserContext = createContext<UserContextType>({
   user: null,
   signIn: () => {},
   signOut: () => {},
+  refresh: () => {},
 });
 
 const useProvideAuth = () => {
@@ -21,25 +22,26 @@ const useProvideAuth = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const autoLogin = async () => {
-      try {
-        const response = await fetch(
-          process.env.BASE_URL + "?m=sessioncheck&v=2&autologin=0",
-          {
-            method: "POST",
-            credentials: "include",
-          }
-        );
-        const result = await response.json();
-        // console.log("Success Auto login:" + result.sessionid);
-        setUser(result);
-      } catch (error) {
-        console.log("Error :" + error);
-      }
-    };
     autoLogin();
     setIsLoading(false);
   }, []);
+
+  const autoLogin = async () => {
+    try {
+      const response = await fetch(
+        process.env.BASE_URL + "?m=sessioncheck&v=2&autologin=0",
+        {
+          method: "POST",
+          credentials: "include",
+        }
+      );
+      const result = await response.json();
+      // console.log("Success Auto login:" + result.sessionid);
+      setUser(result);
+    } catch (error) {
+      console.log("Error :" + error);
+    }
+  };
 
   const signIn = async (data: UserLogin) => {
     try {
@@ -74,7 +76,11 @@ const useProvideAuth = () => {
       return null;
     }
   };
-  return { user, isLoading, signIn, signOut };
+  const refresh = () => {
+    autoLogin;
+  };
+
+  return { user, isLoading, signIn, signOut, refresh };
 };
 
 export const useAuth = () => {

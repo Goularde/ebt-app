@@ -1,67 +1,55 @@
-import { Text, View, Pressable, StyleSheet } from "react-native";
+import { Text, View, StyleSheet, SafeAreaView } from "react-native";
 import { useAuth } from "../context/UserContext";
 import { CustomButton } from "../components/CustomButton";
 
 const ProfileScreen = () => {
-  const { user, signOut } = useAuth();
+  const { user, signOut, refresh } = useAuth();
 
   return (
-    <View style={styles.container}>
-      <View style={styles.labelContainer}>
-        <Text style={styles.label}>{user?.username}</Text>
+    <SafeAreaView style={styles.container}>
+      <Text style={styles.label}>{user?.username || "Username"}</Text>
+      <View style={styles.infoContainer}>
+        <Text style={styles.infos}>Pays : {user?.my_country || "Country"}</Text>
+        <Text style={styles.infos}>Hits : {user?.totalhits || "0"}</Text>
+        <Text style={styles.infos}>
+          Billets entrés : {user?.totalbills || "0"}
+        </Text>
+        <Text style={styles.infos}>
+          Dernier biller entré : {user?.totalbills || "0"}
+        </Text>
       </View>
-      <View style={styles.flexRow}>
-        <View style={styles.infoContainer}>
-          <Text>Pays : {user?.my_country}</Text>
-          <Text>Hits : {user?.totalhits}</Text>
-          <Text>Billets entrés : {user?.totalbills}</Text>
-          <Text>Dernier biller entré : {user?.totalbills}</Text>
-        </View>
+      <Text style={styles.label}>classement</Text>
+      <View style={{ flex: 1, justifyContent: "flex-end", gap: 15 }}>
+        <CustomButton text="Se déconnecter" onPress={signOut} />
+        <CustomButton text="rafraîchir" onPress={refresh} />
       </View>
-      <Text style={styles.label}>Classment</Text>
-      <View style={styles.flexRow}>
-        <View style={styles.infoContainer}>
-          <Text>Local : {/*TODO*/}</Text>
-          <Text>National : {/*TODO*/}</Text>
-          <Text>Mondial : {/*TODO*/}</Text>
-        </View>
-      </View>
-      <Text style={styles.label}>Montant des billets</Text>
-      <Text>Total : {/*TODO*/}</Text>
-      <View style={styles.flexRow}>
-        <View style={styles.infoContainer}>
-          {/*TODO Composant qui affiche dans des barre le pourcentage de chaque billet*/}
-        </View>
-      </View>
-      <CustomButton text="Se déconnecter" onPress={signOut} />
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 10,
-    justifyContent: "space-evenly",
-    alignItems: "center",
-  },
-  labelContainer: {
-    marginTop: 35,
-    marginBottom: 25,
+    justifyContent: "center",
+    alignContent: "center",
+    backgroundColor: "#FEF9EF",
+    paddingHorizontal: 20,
+    gap: 15,
   },
   label: {
+    alignSelf: "center",
     fontSize: 25,
   },
   infoContainer: {
-    width: 100,
-    padding: 8,
-    borderWidth: 2,
-    borderColor: "#383838",
-    borderRadius: 5,
-    flex: 1,
+    borderRadius: 10,
+    padding: 15,
+    backgroundColor: "#FFCB77",
+    elevation: 5,
+    color: "#FEF9EF",
   },
-  flexRow: {
-    flexDirection: "row",
+  infos: {
+    fontSize: 18,
+    color: "#FEF9EF",
   },
 });
 

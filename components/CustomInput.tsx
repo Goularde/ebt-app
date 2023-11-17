@@ -1,5 +1,11 @@
 import { Control, Controller, FieldValues } from "react-hook-form";
-import { StyleSheet, Text, TextInput, View, InputModeOptions } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+  InputModeOptions,
+} from "react-native";
 
 type CustomInputProps = {
   control: Control<FieldValues, any>;
@@ -13,7 +19,8 @@ type CustomInputProps = {
   };
   placeholder: string;
   secureTextEntry?: boolean | undefined;
-  inputMode?: InputModeOptions | undefined
+  inputMode?: InputModeOptions | undefined;
+  toUpperCase?: boolean;
 };
 
 export default function CustomInput({
@@ -23,6 +30,7 @@ export default function CustomInput({
   placeholder,
   secureTextEntry,
   inputMode,
+  toUpperCase,
 }: CustomInputProps) {
   return (
     <Controller
@@ -50,7 +58,10 @@ export default function CustomInput({
             onChangeText={onChange}
             onBlur={onBlur}
             placeholder={placeholder}
-            style={styles.input}
+            style={[
+              styles.input,
+              toUpperCase && { textTransform: "uppercase" },
+            ]}
             secureTextEntry={secureTextEntry}
             inputMode={inputMode}
           />

@@ -15,6 +15,7 @@ type CustomInputProps = {
   data: string[];
   handleClick: (item: String | undefined) => void;
 };
+
 const SelectFlatList = ({
   placeholder,
   data,
@@ -46,14 +47,17 @@ const SelectFlatList = ({
               {selectedItem ? selectedItem.toString() : placeholder}
             </Text>
             {selectedItem ? (
-              <Ionicons
-                name="close-outline"
-                size={18}
+              <Pressable
                 onPress={() => {
                   setSelectedItem(undefined);
                   handleClick(undefined);
                 }}
-              />
+                hitSlop={10}>
+                <Ionicons
+                  name="close-outline"
+                  size={18}
+                />
+              </Pressable>
             ) : (
               <Ionicons name="chevron-down-outline" size={18} />
             )}
