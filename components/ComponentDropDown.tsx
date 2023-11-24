@@ -23,7 +23,11 @@ const ComponentDropDown = ({ index, component }: componentDropDownProps) => {
         >
           <Text>Billet {index + 1}</Text>
 
-          {isOpen ? <Ionicons name="chevron-up-outline" size={20} />:<Ionicons name="chevron-down-outline" size={20} />}
+          {isOpen ? (
+            <Ionicons name="chevron-up-outline" size={20} />
+          ) : (
+            <Ionicons name="chevron-down-outline" size={20} />
+          )}
         </View>
       </Pressable>
       <View style={{ display: isOpen ? "flex" : "none" }}>{component}</View>

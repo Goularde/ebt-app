@@ -3,15 +3,28 @@ import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuth } from "../context/UserContext";
 import { formatAddBillResponse } from "../utils/formatAddBillResponse";
-import { useForm } from "react-hook-form";
-import { bill } from "../types/bill";
+import { useForm, useFieldArray } from "react-hook-form";
+import { insertBillFormType } from "../types/insertBillFormType";
 import { CustomButton } from "../components/CustomButton";
-import countries from "../data/countries.json";
 import { formatBillTitle } from "../utils/formatBillTitle";
+import { bill } from "../types/bill";
+import countries from "../data/countries.json";
 import SelectFlatList from "../components/SelectFlatList";
 import CustomInput from "../components/CustomInput";
 import Bill from "../components/Bill";
 import ComponentDropDown from "../components/ComponentDropDown";
+
+type FormValues = {
+  city: string;
+  postal: string;
+  country: string;
+  bills: {
+    billValue: string;
+    serial: string;
+    shortCode: string;
+    comment: string;
+  }[];
+};
 
 const AddBillScreen = () => {
   let country: String | undefined;
@@ -20,12 +33,26 @@ const AddBillScreen = () => {
   const { user } = useAuth();
 
   const [result, setResult] = useState<String>();
-  const [numberOfBill, setNumberOfBill] = useState(1);
+  const [bills, setBills] = useState<bill[]>([
+    { billValue: "", shortCode: "", serial: "", comment: "" },
+  ]);
 
-  const form = useForm();
+  const form = useForm<FormValues>({
+    defaultValues: {
+      city: "",
+      postal: "",
+      country: "",
+      bills: [{ billValue: "", serial: "", shortCode: "", comment: "" }],
+    },
+  });
   const { control } = form;
 
-  const addBill = async (data: bill) => {
+  const { fields } = useFieldArray({
+    name: "bills",
+    control,
+  });
+
+  const addBill = async (data: insertBillFormType) => {
     try {
       const response = await fetch(
         process.env.BASE_URL +
@@ -78,10 +105,11 @@ const AddBillScreen = () => {
               inputMode="numeric"
             />
           </View>
-          <Text style={styles.title}>{formatBillTitle(numberOfBill)}</Text>
-          {Array.from(Array(numberOfBill), (e, i) => {
+          <Text style={styles.title}>{formatBillTitle(bills.length)}</Text>
+          {bills.map((e, i) => {
             return (
               <ComponentDropDown
+                key={i}
                 index={i}
                 component={
                   <Bill form={form} handleBillValue={handleBillValuePress} />
@@ -102,15 +130,13 @@ const AddBillScreen = () => {
           <CustomButton
             text="+"
             onPress={() => {
-              setNumberOfBill(numberOfBill + 1);
+              setBills([
+                ...bills,
+                { billValue: "", shortCode: "", serial: "", comment: "" },
+              ]);
             }}
           />
-          <CustomButton
-            text="Retirer le dernier billet"
-            onPress={() => {
-              setNumberOfBill(numberOfBill - 1);
-            }}
-          />
+          <CustomButton text="Retirer le dernier billet" onPress={() => {}} />
           <CustomButton
             text="Ajouter le billet"
             onPress={form.handleSubmit(addBill)}
