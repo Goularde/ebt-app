@@ -5,6 +5,7 @@ type CustomButtonProps = {
   color?: string;
   backgrounColor?: string;
   borderColor?: string;
+  rounded?: boolean;
   onPress: () => void;
 };
 
@@ -13,6 +14,7 @@ export const CustomButton = ({
   color,
   backgrounColor,
   borderColor,
+  rounded,
   onPress,
 }: CustomButtonProps) => {
   return (
@@ -22,6 +24,12 @@ export const CustomButton = ({
         pressed && { opacity: 0.8 },
         borderColor ? { borderWidth: 1, borderColor: borderColor } : {},
         { backgroundColor: backgrounColor ? backgrounColor : "#227c9d" },
+        rounded && {
+          borderRadius: 50,
+          alignSelf: "center",
+          marginHorizontal: "auto",
+          paddingHorizontal: 18,
+        },
       ]}
       onPress={onPress}
     >

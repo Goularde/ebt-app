@@ -8,7 +8,7 @@ import {
 } from "react-native";
 
 type CustomInputProps = {
-  control: Control<FieldValues, any>;
+  control: Control<FieldValues>;
   name: string;
   rules?: {
     required?: boolean | string;

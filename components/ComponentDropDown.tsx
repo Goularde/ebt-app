@@ -10,7 +10,7 @@ type componentDropDownProps = {
 const ComponentDropDown = ({ index, component }: componentDropDownProps) => {
   const [isOpen, setIsOpen] = useState<Boolean>(true);
   return (
-    <View style={styles.container}>
+    <>
       <Pressable onPress={() => setIsOpen(!isOpen)}>
         <View
           style={{
@@ -31,7 +31,7 @@ const ComponentDropDown = ({ index, component }: componentDropDownProps) => {
         </View>
       </Pressable>
       <View style={{ display: isOpen ? "flex" : "none" }}>{component}</View>
-    </View>
+    </>
   );
 };
 
