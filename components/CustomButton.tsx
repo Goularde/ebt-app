@@ -9,7 +9,7 @@ type CustomButtonProps = {
   onPress: () => void;
 };
 
-export const CustomButton = ({
+const CustomButton = ({
   text,
   color,
   backgrounColor,
@@ -37,7 +37,7 @@ export const CustomButton = ({
     </Pressable>
   );
 };
-
+export default CustomButton;
 const styles = StyleSheet.create({
   button: {
     marginHorizontal: 19,

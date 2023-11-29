@@ -5,14 +5,10 @@ import { useState } from "react";
 import SelectFlatList from "./SelectFlatList";
 import CustomInput from "./CustomInput";
 import billValues from "../data/billValues.json";
-import { CustomButton } from "./CustomButton";
+import CustomButton from "./CustomButton";
+import CustomControlledInput from "./CustomControlledInput";
 
-const Bill = ({
-  index,
-  control,
-  onRemove,
-  handleFlatListPress,
-}: addBillFormType) => {
+const Bill = ({ index, onRemove, handleFlatListPress }: addBillFormType) => {
   const handleBillValuePress = (billValue: String | undefined) => {
     handleFlatListPress(billValue);
   };
@@ -31,43 +27,43 @@ const Bill = ({
           }}
         >
           <Text>Billet {index + 1}</Text>
-
+          {index > 0 && (
+            <Ionicons
+              name="trash"
+              color={"#FE6D73"}
+              size={20}
+              onPress={() => onRemove(index)}
+            />
+          )}
           {isOpen ? (
             <Ionicons name="chevron-up-outline" size={20} />
           ) : (
             <Ionicons name="chevron-down-outline" size={20} />
           )}
-          {index > 0 && (
-            <CustomButton rounded text="-" onPress={() => onRemove(index)} />
-          )}
         </View>
       </Pressable>
       <View style={{ display: isOpen ? "flex" : "none" }}>
-        <View style={{ flexDirection: "row", gap: 15 }}>
-          <SelectFlatList
+        <View style={{ flexDirection: "row" }}>
+          {/* <SelectFlatList
             placeholder="Valeur du billet"
             data={billValues}
             handleClick={handleBillValuePress}
-          />
-          <CustomInput
+          /> */}
+          <CustomControlledInput
+            label="Code imprimeur"
             name={`bills.${index}.shortCode`}
-            placeholder="Code imprimeur"
-            control={control}
             rules={{ required: "Veuillez entrer un code imprimeur" }}
-            toUpperCase
           />
         </View>
-        <CustomInput
+        <CustomControlledInput
+          label="Numéro de série"
           name={`bills.${index}.serial`}
-          placeholder="Numéro de série"
-          control={control}
           rules={{ required: "Veuillez entrer un code numéro de série" }}
-          toUpperCase
         />
-        <CustomInput
+        <CustomControlledInput
+          label="Commentaire"
           name={`bills.${index}.comment`}
-          placeholder="Commentaire"
-          control={control}
+          rules={{ required: "Veuillez entrer un code numéro de série" }}
         />
       </View>
     </>

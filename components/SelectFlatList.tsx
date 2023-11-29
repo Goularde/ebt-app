@@ -67,6 +67,7 @@ const SelectFlatList = ({
         <>
           <View style={styles.containerColumn}>
             <TextInput
+            
               placeholder={placeholder}
               onFocus={() => {
                 setIsPressed(!isPressed);

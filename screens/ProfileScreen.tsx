@@ -1,7 +1,10 @@
 import { Text, View, StyleSheet, SafeAreaView } from "react-native";
 import { useAuth } from "../context/UserContext";
-import { CustomButton } from "../components/CustomButton";
-
+import CustomButton from "../components/CustomButton";
+import ModalSelect from "../components/ModalSelect";
+import countries from "../data/countries.json";
+import CustomControlledInput from "../components/CustomControlledInput";
+import { FormProvider } from "react-hook-form";
 const ProfileScreen = () => {
   const { user, signOut, refresh } = useAuth();
 
@@ -17,6 +20,9 @@ const ProfileScreen = () => {
         <Text style={styles.infos}>
           Dernier biller entré : {user?.totalbills || "0"}
         </Text>
+      </View>
+      <View style={styles.infoContainer}>
+        <ModalSelect data={countries} placeholder="Coucou" />
       </View>
       <Text style={styles.label}>classement</Text>
       <View style={{ flex: 1, justifyContent: "flex-end", gap: 15 }}>

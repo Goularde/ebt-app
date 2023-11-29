@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { useAuth } from "../context/UserContext";
 import Svg, { Path } from "react-native-svg";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { CustomButton } from "../components/CustomButton";
+import CustomButton from "../components/CustomButton";
 
 const LogInScreen = () => {
   const { control, handleSubmit } = useForm();
