@@ -21,9 +21,9 @@ const ProfileScreen = () => {
           Dernier biller entré : {user?.totalbills || "0"}
         </Text>
       </View>
-      <View style={styles.infoContainer}>
+      {/* <View style={styles.infoContainer}>
         <ModalSelect data={countries} placeholder="Coucou" />
-      </View>
+      </View> */}
       <Text style={styles.label}>classement</Text>
       <View style={{ flex: 1, justifyContent: "flex-end", gap: 15 }}>
         <CustomButton text="Se déconnecter" onPress={signOut} />

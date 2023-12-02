@@ -24,13 +24,14 @@ const AddBillScreen = () => {
 
   const [result, setResult] = useState<String>();
 
-  const methods = useForm<addBillsFormValues>({
+  const { ...methods } = useForm<addBillsFormValues>({
     defaultValues: {
       city: "",
       postal: "",
       country: "",
       bills: [{ billValue: "", serial: "", shortCode: "", comment: "" }],
     },
+    mode: "onChange",
   });
   const control = methods.control;
   const { fields, append, remove } = useFieldArray({
@@ -66,38 +67,27 @@ const AddBillScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View>
-        {/* ScrollView is used here to adjust input to the keyboard size  */}
+        {/* ScrollView is used to adjust input to the keyboard size  */}
         <ScrollView automaticallyAdjustKeyboardInsets={true}>
-          <Text style={styles.title}>Lieu</Text>
           <FormProvider {...methods}>
+            <Text style={styles.title}>Lieu</Text>
             <View style={styles.inputContainer}>
               {/* <SelectFlatList
                 placeholder="Selectionnez un pays"
                 data={countries}
                 handleClick={handleCountryPress}
               /> */}
-              {/* <CustomInput
-                name="city"
-                placeholder="Ville"
-                control={control as unknown as Control<FieldValues>}
-                rules={{ required: "Veuillez entrer une ville" }}
-              /> */}
+
               <CustomControlledInput
                 label="Ville"
                 name="city"
-                rules={{ required: "Veuillez entrer une ville" }}
+                // rules={{ required: "Veuillez entrer une ville" }}
               />
-              {/* <CustomInput
-                name="postal"
-                placeholder="Code postal"
-                control={control as unknown as Control<FieldValues>}
-                rules={{ required: "Veuillez entrer un code postal" }}
-                inputMode="numeric"
-              /> */}
               <CustomControlledInput
                 label="Code Postal"
                 name="postal"
-                rules={{ required: "Veuillez entrer un code postal" }}
+                keyboardType="number-pad"
+                // rules={{ required: "Veuillez entrer un code postal" }}
               />
             </View>
 
@@ -114,25 +104,26 @@ const AddBillScreen = () => {
                 );
               })}
             </View>
+
+            <View style={{ gap: 15 }}>
+              <CustomButton
+                text="+"
+                rounded
+                onPress={() =>
+                  append({
+                    billValue: "",
+                    serial: "",
+                    shortCode: "",
+                    comment: "",
+                  })
+                }
+              />
+              <CustomButton
+                text="Ajouter le billet"
+                onPress={methods.handleSubmit(addBill)}
+              />
+            </View>
           </FormProvider>
-          <View style={{ gap: 15 }}>
-            <CustomButton
-              text="+"
-              rounded
-              onPress={() =>
-                append({
-                  billValue: "",
-                  serial: "",
-                  shortCode: "",
-                  comment: "",
-                })
-              }
-            />
-            <CustomButton
-              text="Ajouter le billet"
-              onPress={methods.handleSubmit(addBill)}
-            />
-          </View>
           {result ? <Text style={styles.resultText}>{result}</Text> : <></>}
         </ScrollView>
       </View>

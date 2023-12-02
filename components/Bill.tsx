@@ -7,6 +7,7 @@ import CustomInput from "./CustomInput";
 import billValues from "../data/billValues.json";
 import CustomButton from "./CustomButton";
 import CustomControlledInput from "./CustomControlledInput";
+import ModalSelect from "./ModalSelect";
 
 const Bill = ({ index, onRemove, handleFlatListPress }: addBillFormType) => {
   const handleBillValuePress = (billValue: String | undefined) => {
@@ -43,27 +44,44 @@ const Bill = ({ index, onRemove, handleFlatListPress }: addBillFormType) => {
         </View>
       </Pressable>
       <View style={{ display: isOpen ? "flex" : "none" }}>
-        <View style={{ flexDirection: "row" }}>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            gap: 15,
+          }}
+        >
           {/* <SelectFlatList
             placeholder="Valeur du billet"
             data={billValues}
             handleClick={handleBillValuePress}
           /> */}
+          <ModalSelect
+            name={`bills.${index}.billValue`}
+            label="Valeur du billet"
+            data={billValues}
+            placeholder="coucou"
+          />
           <CustomControlledInput
             label="Code imprimeur"
             name={`bills.${index}.shortCode`}
-            rules={{ required: "Veuillez entrer un code imprimeur" }}
+            rules={{
+              required: "Veuillez entrer un code imprimeur",
+              minLength: 6,
+              maxLength: 6,
+            }}
+            autoCapitalize="characters"
           />
         </View>
         <CustomControlledInput
           label="Numéro de série"
           name={`bills.${index}.serial`}
           rules={{ required: "Veuillez entrer un code numéro de série" }}
+          autoCapitalize="characters"
         />
         <CustomControlledInput
           label="Commentaire"
           name={`bills.${index}.comment`}
-          rules={{ required: "Veuillez entrer un code numéro de série" }}
         />
       </View>
     </>

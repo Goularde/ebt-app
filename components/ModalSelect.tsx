@@ -11,35 +11,63 @@ import {
 import CustomInput from "./CustomInput";
 import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
+import {
+  UseControllerProps,
+  useController,
+  useFormContext,
+} from "react-hook-form";
 
-interface ModalSelectProps extends TextInputProps {
+interface ModalSelectProps extends TextInputProps, UseControllerProps {
   data: string[];
+  label: string;
+  name: string;
+  defaultValue?: string;
 }
 
-const ModalSelect = ({ data, placeholder }: ModalSelectProps) => {
+const ModalSelect = (props: ModalSelectProps) => {
+  const { name, rules, defaultValue, label, data, ...inputProps } = props;
   const [isModalVisible, setIsModalVisible] = useState<boolean | undefined>(
     false
   );
+
   const [selectedItem, setSelectedItem] = useState<string>();
+
+  const formContext = useFormContext();
+
+  const { field } = useController({ name, rules, defaultValue });
+  const { formState } = formContext;
+  const hasError = Boolean(formState?.errors[name]);
+  if (!formContext || !name) {
+    const msg = !formContext
+      ? "Test Input must be wrapped by the FormProvider"
+      : "Name must be defined";
+    console.error(msg);
+    return null;
+  }
+
   return (
-    <>
-      <Pressable
-        onPress={() => setIsModalVisible(!isModalVisible)}
-        style={styles.containerRow}
-      >
-        <TextInput
-          value={selectedItem}
-          editable={false}
-          style={{
-            color: "#000",
-          }}
-          placeholder={placeholder}
-        />
-        <Ionicons
-          name={isModalVisible ? "chevron-up-outline" : "chevron-down-outline"}
-          size={18}
-        />
-      </Pressable>
+    <View style={styles.container}>
+      <Text style={styles.label}>{label}</Text>
+      <View>
+        <Pressable
+          onPress={() => setIsModalVisible(!isModalVisible)}
+          style={styles.containerRow}
+        >
+          <Text
+            style={{
+              color: "#000",
+            }}
+          >
+            {field.value}
+          </Text>
+          <Ionicons
+            name={
+              isModalVisible ? "chevron-up-outline" : "chevron-down-outline"
+            }
+            size={18}
+          />
+        </Pressable>
+      </View>
 
       <Modal
         animationType="slide"
@@ -77,6 +105,7 @@ const ModalSelect = ({ data, placeholder }: ModalSelectProps) => {
                     style={styles.item}
                     onPress={() => {
                       setSelectedItem(item);
+                      field.onChange(item);
                       setIsModalVisible(false);
                     }}
                   >
@@ -88,7 +117,7 @@ const ModalSelect = ({ data, placeholder }: ModalSelectProps) => {
           </View>
         </View>
       </Modal>
-    </>
+    </View>
   );
 };
 export default ModalSelect;
@@ -98,11 +127,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    width: "100%",
+    // width: "100%",
     backgroundColor: "#FEF9EF",
     paddingVertical: 7,
     paddingHorizontal: 10,
     borderRadius: 10,
+    height: 40,
     elevation: 3,
   },
   centeredView: {
@@ -135,5 +165,12 @@ const styles = StyleSheet.create({
     padding: 15,
     paddingLeft: 20,
     borderColor: "#e8e8e8",
+  },
+  label: {
+    color: "#FEF9EF",
+  },
+  container: {
+    flex: 1,
+    justifyContent: "center",
   },
 });

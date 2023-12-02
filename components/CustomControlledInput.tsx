@@ -21,11 +21,20 @@ interface CustomControllerInputProps
 }
 
 const CustomControlledInput = (props: CustomControllerInputProps) => {
+  const formContext = useFormContext();
+
   const { label, name, rules, defaultValue, ...inputProps } = props;
 
-  const formContext = useFormContext();
-  const { formState } = formContext;
   const { field } = useController({ name, rules, defaultValue });
+  const { formState } = formContext;
+  const hasError = Boolean(formState?.errors[name]);
+  if (!formContext || !name) {
+    const msg = !formContext
+      ? "Test Input must be wrapped by the FormProvider"
+      : "Name must be defined";
+    console.error(msg);
+    return null;
+  }
 
   return (
     <View style={styles.container}>
@@ -34,11 +43,12 @@ const CustomControlledInput = (props: CustomControllerInputProps) => {
         <TextInput
           style={styles.input}
           onBlur={field.onBlur}
-          onChange={field.onChange}
+          onChangeText={field.onChange}
           value={field.value}
           {...inputProps}
         />
       </View>
+      {hasError && <Text>{formState.errors.root?.message}</Text>}
     </View>
   );
 };
@@ -49,12 +59,11 @@ const styles = StyleSheet.create({
     color: "#FEF9EF",
   },
   container: {
-    flex: -1,
+    flex: 1,
     justifyContent: "center",
   },
   input: {
     backgroundColor: "#FEF9EF",
-    borderColor: "none",
     elevation: 3,
     height: 40,
     padding: 10,
