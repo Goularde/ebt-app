@@ -9,10 +9,7 @@ import CustomButton from "./CustomButton";
 import CustomControlledInput from "./CustomControlledInput";
 import ModalSelect from "./ModalSelect";
 
-const Bill = ({ index, onRemove, handleFlatListPress }: addBillFormType) => {
-  const handleBillValuePress = (billValue: String | undefined) => {
-    handleFlatListPress(billValue);
-  };
+const Bill = ({ index, onRemove }: addBillFormType) => {
   const [isOpen, setIsOpen] = useState<Boolean>(true);
   return (
     <>
@@ -28,19 +25,18 @@ const Bill = ({ index, onRemove, handleFlatListPress }: addBillFormType) => {
           }}
         >
           <Text>Billet {index + 1}</Text>
-          {index > 0 && (
-            <Ionicons
-              name="trash"
-              color={"#FE6D73"}
-              size={20}
-              onPress={() => onRemove(index)}
-            />
-          )}
-          {isOpen ? (
-            <Ionicons name="chevron-up-outline" size={20} />
-          ) : (
-            <Ionicons name="chevron-down-outline" size={20} />
-          )}
+          <View style={{ flexDirection: "row", gap: 10 }}>
+            {isOpen ? (
+              <Ionicons name="chevron-up-outline" size={20} />
+            ) : (
+              <Ionicons name="chevron-down-outline" size={20} />
+            )}
+            {index > 0 && (
+              <Pressable onPress={() => onRemove(index)} hitSlop={5}>
+                <Ionicons name="trash" color={"#FE6D73"} size={20} />
+              </Pressable>
+            )}
+          </View>
         </View>
       </Pressable>
       <View style={{ display: isOpen ? "flex" : "none" }}>

@@ -1,5 +1,5 @@
 export type User = {
-  sessionId: string | null | undefined;
+  sessionid: string | null | undefined;
   username: string | null | undefined;
   my_city: string | null | undefined;
   my_country: string | null | undefined;

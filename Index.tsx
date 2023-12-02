@@ -30,6 +30,7 @@ export default function App() {
             },
             tabBarActiveTintColor: "#FE6D73",
             tabBarInactiveTintColor: "gray",
+            tabBarHideOnKeyboard: true,
           })}
         >
           <Tab.Screen

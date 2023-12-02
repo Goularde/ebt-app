@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuth } from "../context/UserContext";
@@ -18,9 +18,12 @@ import CustomInput from "../components/CustomInput";
 import Bill from "../components/Bill";
 import { addBillsFormValues } from "../types/addBillsFormValues";
 import CustomControlledInput from "../components/CustomControlledInput";
+import ModalSelect from "../components/ModalSelect";
+import { Bills } from "../types/Bills";
+import formatBillsData from "../utils/formatBillsData";
 
 const AddBillScreen = () => {
-  let billValue: String | undefined;
+  const { user } = useAuth();
 
   const [result, setResult] = useState<String>();
 
@@ -41,28 +44,25 @@ const AddBillScreen = () => {
 
   const addBill = async (data: addBillsFormValues) => {
     try {
-      console.log(data);
+      //Prepare the request with the form data
+      const request =
+        process.env.BASE_URL +
+        `?m=insertbills&v=1&PHPSESSID=${user?.sessionid}&city=${data.city}&zip=${data.postal}&country=${data.country}` +
+        formatBillsData(data.bills);
+      
+      //Sends the request
+      const response = await fetch(request, {
+        method: "POST",
+        credentials: "include",
+      });
 
-      // const response = await fetch(
-      //   process.env.BASE_URL +
-      //     `?m=insertbills&v=1&PHPSESSID=${user?.sessionId}&city=${data.city}&zip=${data.postal}&country=${country}&serial0=${data.serial}&denomination0=${billValue}&shortcode0=${data.shortCode}&comment0=${data.comment}`,
-      //   {
-      //     method: "POST",
-      //     credentials: "include",
-      //   }
-      // );
-      // const result = await response.json();
-      // console.log(result);
-      // setResult(formatAddBillResponse(result.note0.status));
+      const result = await response.json();
+      console.log(result);
+      setResult(formatAddBillResponse(result.note0.status));
     } catch (error) {
       console.log("Error :" + error);
       return null;
     }
-  };
-
-  const handleBillValuePress = (value: String | undefined) => {
-    billValue = value;
-    console.log(billValue);
   };
   return (
     <SafeAreaView style={styles.container}>
@@ -72,16 +72,13 @@ const AddBillScreen = () => {
           <FormProvider {...methods}>
             <Text style={styles.title}>Lieu</Text>
             <View style={styles.inputContainer}>
-              {/* <SelectFlatList
-                placeholder="Selectionnez un pays"
-                data={countries}
-                handleClick={handleCountryPress}
-              /> */}
+              <ModalSelect data={countries} label="Pays" name="country" />
 
               <CustomControlledInput
                 label="Ville"
                 name="city"
-                // rules={{ required: "Veuillez entrer une ville" }}
+                enterKeyHint="next"
+                returnKeyType="next"
               />
               <CustomControlledInput
                 label="Code Postal"
@@ -99,7 +96,6 @@ const AddBillScreen = () => {
                     key={field.id}
                     index={index}
                     onRemove={() => remove(index)}
-                    handleFlatListPress={handleBillValuePress}
                   />
                 );
               })}

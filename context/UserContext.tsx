@@ -64,7 +64,7 @@ const useProvideAuth = () => {
   const signOut = async () => {
     try {
       await fetch(
-        process.env.BASE_URL + `?m=logout&v=1&PHPSESSID=${user?.sessionId}`,
+        process.env.BASE_URL + `?m=logout&v=1&PHPSESSID=${user?.sessionid}`,
         {
           method: "POST",
           credentials: "include",
