@@ -1,15 +1,12 @@
-import { View, StyleSheet, Pressable, Text } from "react-native";
+import { View, Pressable, Text } from "react-native";
 import { addBillFormType } from "../types/addBillFormType";
 import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
-import SelectFlatList from "./SelectFlatList";
-import CustomInput from "./CustomInput";
 import billValues from "../data/billValues.json";
-import CustomButton from "./CustomButton";
 import CustomControlledInput from "./CustomControlledInput";
 import ModalSelect from "./ModalSelect";
 
-const Bill = ({ index, onRemove }: addBillFormType) => {
+const Bill = ({ index, onRemove, error }: addBillFormType) => {
   const [isOpen, setIsOpen] = useState<Boolean>(true);
   return (
     <>
@@ -40,6 +37,9 @@ const Bill = ({ index, onRemove }: addBillFormType) => {
         </View>
       </Pressable>
       <View style={{ display: isOpen ? "flex" : "none" }}>
+        {error && (
+          <Text style={{ color: "#FE6D73", alignSelf: "center" }}>{error}</Text>
+        )}
         <View
           style={{
             flexDirection: "row",

@@ -1,4 +1,21 @@
-export const formatAddBillResponse = (status: number) => {
+type Notes = {
+  [notes: string]: { denomination: string; serial: string; status: string };
+};
+
+export const formatAddBillResponse = (notes: Notes) => {
+  let status: number[] = [];
+  for (let i = 0; i < Object.keys(notes).length; i++) {
+    status.push(Number(notes[`note${i}`].status));
+  }
+
+  let result: string[] = [];
+  status.forEach((e) => {
+    result.push(statusToText(e));
+  });
+  return result;
+};
+
+const statusToText = (status: number) => {
   switch (status) {
     case 0:
       return "Billet enregistré, pas de hit";
@@ -13,7 +30,7 @@ export const formatAddBillResponse = (status: number) => {
     case 16:
       return "Code imprimeur invalide";
     case 24:
-      return "Mauvais numéro de série et de code imprimeur";
+      return "Mauvais numéro de série et code imprimeur";
     case 28:
       return "Mauvais numéro de série, code imprimeur et pays";
     case 32:
@@ -24,5 +41,7 @@ export const formatAddBillResponse = (status: number) => {
       return "Vous avez déjà ce numéro de série";
     case 32768:
       return "Code imprimeur ou numéro de série invalide pour cette valeur de billet";
+    default:
+      return "Erreur inconnue";
   }
 };

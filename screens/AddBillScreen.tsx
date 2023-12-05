@@ -1,38 +1,31 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuth } from "../context/UserContext";
 import { formatAddBillResponse } from "../utils/formatAddBillResponse";
-import {
-  useForm,
-  useFieldArray,
-  Control,
-  FieldValues,
-  FormProvider,
-} from "react-hook-form";
+import { useForm, useFieldArray, FormProvider } from "react-hook-form";
 import CustomButton from "../components/CustomButton";
 import formatBillTitle from "../utils/formatBillTitle";
 import countries from "../data/countries.json";
-import SelectFlatList from "../components/SelectFlatList";
-import CustomInput from "../components/CustomInput";
 import Bill from "../components/Bill";
 import { addBillsFormValues } from "../types/addBillsFormValues";
 import CustomControlledInput from "../components/CustomControlledInput";
 import ModalSelect from "../components/ModalSelect";
-import { Bills } from "../types/Bills";
 import formatBillsData from "../utils/formatBillsData";
 
 const AddBillScreen = () => {
-  const { user } = useAuth();
+  const [result, setResult] = useState<string[]>();
 
-  const [result, setResult] = useState<String>();
+  const { user } = useAuth();
 
   const { ...methods } = useForm<addBillsFormValues>({
     defaultValues: {
-      city: "",
-      postal: "",
-      country: "",
-      bills: [{ billValue: "", serial: "", shortCode: "", comment: "" }],
+      city: "Saint-Etienne",
+      postal: "42000",
+      country: "France",
+      bills: [
+        { billValue: "5", serial: "AZERTY", shortCode: "AZERTY", comment: "" },
+      ],
     },
     mode: "onChange",
   });
@@ -49,7 +42,7 @@ const AddBillScreen = () => {
         process.env.BASE_URL +
         `?m=insertbills&v=1&PHPSESSID=${user?.sessionid}&city=${data.city}&zip=${data.postal}&country=${data.country}` +
         formatBillsData(data.bills);
-      
+
       //Sends the request
       const response = await fetch(request, {
         method: "POST",
@@ -57,8 +50,10 @@ const AddBillScreen = () => {
       });
 
       const result = await response.json();
+      delete result.data;
       console.log(result);
-      setResult(formatAddBillResponse(result.note0.status));
+      formatAddBillResponse(result);
+      setResult(formatAddBillResponse(result));
     } catch (error) {
       console.log("Error :" + error);
       return null;
@@ -68,7 +63,10 @@ const AddBillScreen = () => {
     <SafeAreaView style={styles.container}>
       <View>
         {/* ScrollView is used to adjust input to the keyboard size  */}
-        <ScrollView automaticallyAdjustKeyboardInsets={true}>
+        <ScrollView
+          automaticallyAdjustKeyboardInsets={true}
+          keyboardDismissMode="on-drag"
+        >
           <FormProvider {...methods}>
             <Text style={styles.title}>Lieu</Text>
             <View style={styles.inputContainer}>
@@ -96,6 +94,7 @@ const AddBillScreen = () => {
                     key={field.id}
                     index={index}
                     onRemove={() => remove(index)}
+                    error={result && result[index]}
                   />
                 );
               })}
@@ -120,7 +119,6 @@ const AddBillScreen = () => {
               />
             </View>
           </FormProvider>
-          {result ? <Text style={styles.resultText}>{result}</Text> : <></>}
         </ScrollView>
       </View>
     </SafeAreaView>

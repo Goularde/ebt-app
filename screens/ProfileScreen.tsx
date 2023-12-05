@@ -1,17 +1,13 @@
 import { Text, View, StyleSheet, SafeAreaView } from "react-native";
 import { useAuth } from "../context/UserContext";
 import CustomButton from "../components/CustomButton";
-import ModalSelect from "../components/ModalSelect";
-import countries from "../data/countries.json";
-import CustomControlledInput from "../components/CustomControlledInput";
-import { FormProvider } from "react-hook-form";
 const ProfileScreen = () => {
   const { user, signOut, refresh } = useAuth();
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.label}>{user?.username || "Username"}</Text>
       <View style={styles.infoContainer}>
+        <Text style={styles.label}>{user?.username || "Username"}</Text>
         <Text style={styles.infos}>Pays : {user?.my_country || "Country"}</Text>
         <Text style={styles.infos}>Hits : {user?.totalhits || "0"}</Text>
         <Text style={styles.infos}>
@@ -21,9 +17,6 @@ const ProfileScreen = () => {
           Dernier biller entré : {user?.totalbills || "0"}
         </Text>
       </View>
-      {/* <View style={styles.infoContainer}>
-        <ModalSelect data={countries} placeholder="Coucou" />
-      </View> */}
       <Text style={styles.label}>classement</Text>
       <View style={{ flex: 1, justifyContent: "flex-end", gap: 15 }}>
         <CustomButton text="Se déconnecter" onPress={signOut} />
@@ -37,9 +30,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    alignContent: "center",
     backgroundColor: "#FEF9EF",
     paddingHorizontal: 20,
+    marginVertical: 90,
     gap: 15,
   },
   label: {
