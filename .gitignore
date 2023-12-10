@@ -3,6 +3,8 @@
 # Builds
 builds
 aab
+# Infos pour la publication
+Publication
 # dependencies
 node_modules/
 
