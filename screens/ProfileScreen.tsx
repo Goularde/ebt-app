@@ -6,21 +6,28 @@ const ProfileScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.infoContainer}>
-        <Text style={styles.label}>{user?.username || "Username"}</Text>
-        <Text style={styles.infos}>Pays : {user?.my_country || "Country"}</Text>
-        <Text style={styles.infos}>Hits : {user?.totalhits || "0"}</Text>
-        <Text style={styles.infos}>
-          Billets entrés : {user?.totalbills || "0"}
-        </Text>
-        <Text style={styles.infos}>
+      <View style={{ gap: 60 }}>
+        <View style={{ gap: 15 }}>
+          <Text style={styles.label}>{user?.username || "Username"}</Text>
+          <View style={styles.infoContainer}>
+            <View>
+              <Text style={styles.infos}>
+                Pays : {user?.my_country || "Country"}
+              </Text>
+              <Text style={styles.infos}>Hits : {user?.totalhits || "0"}</Text>
+              <Text style={styles.infos}>
+                Billets entrés : {user?.totalbills || "0"}
+              </Text>
+              {/* <Text style={styles.infos}>
           Dernier biller entré : {user?.totalbills || "0"}
-        </Text>
-      </View>
-      <Text style={styles.label}>classement</Text>
-      <View style={{ flex: 1, justifyContent: "flex-end", gap: 15 }}>
-        <CustomButton text="Se déconnecter" onPress={signOut} />
-        <CustomButton text="rafraîchir" onPress={refresh} />
+        </Text> */}
+            </View>
+          </View>
+        </View>
+        <View style={{ gap: 15 }}>
+          <CustomButton text="Se déconnecter" onPress={signOut} />
+          <CustomButton text="rafraîchir" onPress={refresh} disabled />
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -31,13 +38,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     backgroundColor: "#FEF9EF",
-    paddingHorizontal: 20,
-    marginVertical: 90,
-    gap: 15,
   },
   label: {
     alignSelf: "center",
     fontSize: 25,
+    // color: "#FEF9EF",
+    fontWeight: "700",
   },
   infoContainer: {
     borderRadius: 10,
@@ -45,6 +51,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFCB77",
     elevation: 5,
     color: "#FEF9EF",
+    gap: 15,
+    marginHorizontal: 15,
   },
   infos: {
     fontSize: 18,

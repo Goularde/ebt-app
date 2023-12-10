@@ -17,7 +17,7 @@ import {
   useFormContext,
 } from "react-hook-form";
 
-interface ModalSelectProps extends TextInputProps, UseControllerProps {
+interface ModalSelectProps extends UseControllerProps {
   data: string[];
   label: string;
   name: string;
@@ -25,15 +25,13 @@ interface ModalSelectProps extends TextInputProps, UseControllerProps {
 }
 
 const ModalSelect = (props: ModalSelectProps) => {
-  const { name, rules, defaultValue, label, data, ...inputProps } = props;
+  const { name, rules, defaultValue, label, data } = props;
   const [isModalVisible, setIsModalVisible] = useState<boolean | undefined>(
     false
   );
 
-  const [selectedItem, setSelectedItem] = useState<string>();
-
   const formContext = useFormContext();
-
+  const { setValue } = formContext;
   const { field } = useController({ name, rules, defaultValue });
   const { formState } = formContext;
   const hasError = Boolean(formState?.errors[name]);
@@ -60,12 +58,23 @@ const ModalSelect = (props: ModalSelectProps) => {
           >
             {field.value}
           </Text>
-          <Ionicons
-            name={
-              isModalVisible ? "chevron-up-outline" : "chevron-down-outline"
-            }
-            size={18}
-          />
+          {field.value ? (
+            <Pressable
+              onPress={() => {
+                setValue(name, undefined);
+              }}
+              hitSlop={15}
+            >
+              <Ionicons name="close-outline" size={18} />
+            </Pressable>
+          ) : (
+            <Ionicons
+              name={
+                isModalVisible ? "chevron-up-outline" : "chevron-down-outline"
+              }
+              size={18}
+            />
+          )}
         </Pressable>
       </View>
 
@@ -80,7 +89,7 @@ const ModalSelect = (props: ModalSelectProps) => {
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <View style={styles.modalHeader}>
-              <Text style={{ fontWeight: "bold" }}>coucuo</Text>
+              <Text style={{ fontWeight: "bold" }}>{label}</Text>
               <Pressable
                 onPress={() => {
                   setIsModalVisible(false);
@@ -104,7 +113,6 @@ const ModalSelect = (props: ModalSelectProps) => {
                     key={item}
                     style={styles.item}
                     onPress={() => {
-                      setSelectedItem(item);
                       field.onChange(item);
                       setIsModalVisible(false);
                     }}
@@ -127,7 +135,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    // width: "100%",
     backgroundColor: "#FEF9EF",
     paddingVertical: 7,
     paddingHorizontal: 10,

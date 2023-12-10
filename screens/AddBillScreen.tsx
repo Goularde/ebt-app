@@ -5,7 +5,6 @@ import { useAuth } from "../context/UserContext";
 import { formatAddBillResponse } from "../utils/formatAddBillResponse";
 import { useForm, useFieldArray, FormProvider } from "react-hook-form";
 import CustomButton from "../components/CustomButton";
-import formatBillTitle from "../utils/formatBillTitle";
 import countries from "../data/countries.json";
 import Bill from "../components/Bill";
 import { addBillsFormValues } from "../types/addBillsFormValues";
@@ -14,18 +13,17 @@ import ModalSelect from "../components/ModalSelect";
 import formatBillsData from "../utils/formatBillsData";
 
 const AddBillScreen = () => {
+  const requiredString = "Champ requis.";
   const [result, setResult] = useState<string[]>();
 
   const { user } = useAuth();
 
   const { ...methods } = useForm<addBillsFormValues>({
     defaultValues: {
-      city: "Saint-Etienne",
-      postal: "42000",
-      country: "France",
-      bills: [
-        { billValue: "5", serial: "AZERTY", shortCode: "AZERTY", comment: "" },
-      ],
+      city: "",
+      postal: "",
+      country: "",
+      bills: [{ billValue: "", serial: "", shortCode: "", comment: "" }],
     },
     mode: "onChange",
   });
@@ -34,7 +32,7 @@ const AddBillScreen = () => {
     name: "bills",
     control,
   });
-
+  const { errors } = methods.formState;
   const addBill = async (data: addBillsFormValues) => {
     try {
       //Prepare the request with the form data
@@ -77,30 +75,47 @@ const AddBillScreen = () => {
                 name="city"
                 enterKeyHint="next"
                 returnKeyType="next"
+                rules={{ required: requiredString }}
               />
               <CustomControlledInput
                 label="Code Postal"
                 name="postal"
                 keyboardType="number-pad"
+                rules={{ required: requiredString }}
                 // rules={{ required: "Veuillez entrer un code postal" }}
               />
             </View>
 
-            <Text style={styles.title}>{formatBillTitle(fields.length)}</Text>
+            <Text style={styles.title}>
+              {fields.length > 1 ? "Billets" : "Billet"}
+            </Text>
             <View style={[styles.inputContainer, { gap: 15 }]}>
               {fields.map((field, index) => {
                 return (
-                  <Bill
-                    key={field.id}
-                    index={index}
-                    onRemove={() => remove(index)}
-                    error={result && result[index]}
-                  />
+                  <View key={field.id}>
+                    <Bill
+                      index={index}
+                      onRemove={() => remove(index)}
+                      result={result && result[index]}
+                    />
+                    {errors.bills?.[index]?.shortCode && (
+                      <Text style={styles.errorText}>
+                        Code imprimeur :{" "}
+                        {errors.bills?.[index]?.shortCode?.message}
+                      </Text>
+                    )}
+                    {errors.bills?.[index]?.serial && (
+                      <Text style={styles.errorText}>
+                        Numéro de série :{" "}
+                        {errors.bills?.[index]?.serial?.message}
+                      </Text>
+                    )}
+                  </View>
                 );
               })}
             </View>
 
-            <View style={{ gap: 15 }}>
+            <View style={{ gap: 15, marginBottom: 25 }}>
               <CustomButton
                 text="+"
                 rounded
@@ -114,7 +129,11 @@ const AddBillScreen = () => {
                 }
               />
               <CustomButton
-                text="Ajouter le billet"
+                text={
+                  fields.length > 1
+                    ? "Ajouter les billets"
+                    : "Ajouter le billet"
+                }
                 onPress={methods.handleSubmit(addBill)}
               />
             </View>
@@ -159,6 +178,9 @@ const styles = StyleSheet.create({
     elevation: 3,
     paddingHorizontal: 10,
     backgroundColor: "#FEF9EF",
+  },
+  errorText: {
+    color: "red",
   },
 });
 export default AddBillScreen;

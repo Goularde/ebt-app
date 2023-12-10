@@ -6,6 +6,7 @@ type CustomButtonProps = {
   backgrounColor?: string;
   borderColor?: string;
   rounded?: boolean;
+  disabled?: boolean;
   onPress: () => void;
 };
 
@@ -15,10 +16,12 @@ const CustomButton = ({
   backgrounColor,
   borderColor,
   rounded,
+  disabled,
   onPress,
 }: CustomButtonProps) => {
   return (
     <Pressable
+      disabled={disabled}
       style={({ pressed }) => [
         styles.button,
         pressed && { opacity: 0.8 },

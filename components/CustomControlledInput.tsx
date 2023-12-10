@@ -9,7 +9,6 @@ import {
 import {
   useController,
   useFormContext,
-  ControllerProps,
   UseControllerProps,
 } from "react-hook-form";
 
@@ -27,10 +26,11 @@ const CustomControlledInput = (props: CustomControllerInputProps) => {
 
   const { field } = useController({ name, rules, defaultValue });
   const { formState } = formContext;
+  const { errors } = formState;
   const hasError = Boolean(formState?.errors[name]);
   if (!formContext || !name) {
     const msg = !formContext
-      ? "Test Input must be wrapped by the FormProvider"
+      ? "Text Input must be wrapped by the FormProvider"
       : "Name must be defined";
     console.error(msg);
     return null;
@@ -38,26 +38,30 @@ const CustomControlledInput = (props: CustomControllerInputProps) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>{label}</Text>
+      <Text style={{ color: hasError ? "red" : "#FEF9EF" }}>{label}</Text>
       <View>
         <TextInput
-          style={styles.input}
+          style={[
+            styles.input,
+            { borderColor: hasError ? "red" : "transparent" },
+          ]}
           onBlur={field.onBlur}
           onChangeText={field.onChange}
           value={field.value}
           {...inputProps}
         />
       </View>
-      {hasError && <Text>{formState.errors.root?.message}</Text>}
+      {hasError && (
+        <Text style={{ color: "red" }}>
+          {errors[name]?.message?.toString()}
+        </Text>
+      )}
     </View>
   );
 };
 export default CustomControlledInput;
 
 const styles = StyleSheet.create({
-  label: {
-    color: "#FEF9EF",
-  },
   container: {
     flex: 1,
     justifyContent: "center",
@@ -68,5 +72,6 @@ const styles = StyleSheet.create({
     height: 40,
     padding: 10,
     borderRadius: 10,
+    borderWidth: 1,
   },
 });

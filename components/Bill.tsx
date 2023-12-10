@@ -6,8 +6,10 @@ import billValues from "../data/billValues.json";
 import CustomControlledInput from "./CustomControlledInput";
 import ModalSelect from "./ModalSelect";
 
-const Bill = ({ index, onRemove, error }: addBillFormType) => {
+const Bill = ({ index, onRemove, result }: addBillFormType) => {
+  const requiredString = "Champ requis.";
   const [isOpen, setIsOpen] = useState<Boolean>(true);
+
   return (
     <>
       <Pressable onPress={() => setIsOpen(!isOpen)}>
@@ -15,8 +17,8 @@ const Bill = ({ index, onRemove, error }: addBillFormType) => {
           style={{
             flexDirection: "row",
             justifyContent: "space-between",
-            paddingBottom: 15,
-            marginBottom: 15,
+            paddingBottom: isOpen ? 15 : 0,
+            marginBottom: isOpen ? 15 : 0,
             borderBottomWidth: isOpen ? 1 : 0,
             borderColor: "#e8e8e8",
           }}
@@ -37,8 +39,10 @@ const Bill = ({ index, onRemove, error }: addBillFormType) => {
         </View>
       </Pressable>
       <View style={{ display: isOpen ? "flex" : "none" }}>
-        {error && (
-          <Text style={{ color: "#FE6D73", alignSelf: "center" }}>{error}</Text>
+        {result && (
+          <Text style={{ color: "#FE6D73", alignSelf: "center" }}>
+            {result}
+          </Text>
         )}
         <View
           style={{
@@ -47,24 +51,18 @@ const Bill = ({ index, onRemove, error }: addBillFormType) => {
             gap: 15,
           }}
         >
-          {/* <SelectFlatList
-            placeholder="Valeur du billet"
-            data={billValues}
-            handleClick={handleBillValuePress}
-          /> */}
           <ModalSelect
             name={`bills.${index}.billValue`}
             label="Valeur du billet"
             data={billValues}
-            placeholder="coucou"
           />
           <CustomControlledInput
             label="Code imprimeur"
             name={`bills.${index}.shortCode`}
             rules={{
-              required: "Veuillez entrer un code imprimeur",
-              minLength: 6,
-              maxLength: 6,
+              required: requiredString,
+              minLength: { value: 6, message: "6 caractères requis." },
+              maxLength: { value: 6, message: "6 caractères requis." },
             }}
             autoCapitalize="characters"
           />
@@ -72,7 +70,7 @@ const Bill = ({ index, onRemove, error }: addBillFormType) => {
         <CustomControlledInput
           label="Numéro de série"
           name={`bills.${index}.serial`}
-          rules={{ required: "Veuillez entrer un code numéro de série" }}
+          rules={{ required: requiredString }}
           autoCapitalize="characters"
         />
         <CustomControlledInput

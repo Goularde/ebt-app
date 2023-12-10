@@ -1,6 +1,6 @@
 import { Text, View, Linking, StyleSheet } from "react-native";
 import CustomInput from "../components/CustomInput";
-import { useForm } from "react-hook-form";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { useAuth } from "../context/UserContext";
 import Svg, { Path } from "react-native-svg";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -41,7 +41,7 @@ const LogInScreen = () => {
         />
       </View>
       <View style={styles.bottom}>
-        <CustomButton text="Se Connecter" onPress={handleSubmit(signIn)} />
+        <CustomButton text="Se Connecter" onPress={handleSubmit(signIn as SubmitHandler<FieldValues>)} />
         <CustomButton
           text="S'inscrire"
           onPress={() => {
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
   },
   bottom: {
     flex: 0.2,
-    justifyContent: "space-between",
     marginBottom: 20,
+    gap: 15,
   },
 });

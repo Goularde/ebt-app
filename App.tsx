@@ -1,6 +1,6 @@
 import React from "react";
 import { UserContextProvider } from "./context/UserContext";
-import Index from "./Index"
+import Index from "./Index";
 
 export default function App() {
   return (
