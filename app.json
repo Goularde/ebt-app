@@ -2,12 +2,12 @@
   "expo": {
     "name": "EBT App",
     "slug": "ebt-app",
-    "version": "0.0.4",
+    "version": "0.1.0",
     "orientation": "portrait",
-    "icon": "./assets/ebtLogo.png",
+    "icon": "./assets/ebt-app-logo.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/ebtScreen.png",
+      "image": "./assets/ebt-app-splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#FEF9EF"
     },
@@ -18,14 +18,14 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/ebtLogo.png",
+        "foregroundImage": "./assets/adaptiveIcon.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.goularde.ebtapp",
-      "versionCode": 4
+      "versionCode": 5
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/adaptiveIcon.png"
     },
     "extra": {
       "eas": {
