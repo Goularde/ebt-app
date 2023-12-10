@@ -3,8 +3,11 @@
 EBT est une application mobile, facilitant l'enregistrement de billets pour le site [Euro Bill Better](https///eurobilltracker.com/)
 
 # L'application
-![Image 1](assets/login-screenshot.jpg)
-![Image 1](assets/addbills-screenshot.jpg)
+[![Login](assets/screenshots/small/login-screenshot.jpg)](assets/screenshots/original/login-screenshot.jpg)
+[![AddBill](assets/screenshots/small/addabillempty-screenshot.jpg)](assets/screenshots/original/addabillempty-screenshot.jpg)
+[![AddBill](assets/screenshots/small/addabill-screenshot.jpg)](assets/screenshots/original/addabill-screenshot.jpg)
+[![AddBills](assets/screenshots/small/addbills-screenshot.jpg)](assets/screenshots/original/addbills-screenshot.jpg)
+[![AddBills](assets/screenshots/small/profile-screenshot.jpg)](assets/screenshots/original/profile-screenshot.jpg)
 ## Usage
 
 ```python
